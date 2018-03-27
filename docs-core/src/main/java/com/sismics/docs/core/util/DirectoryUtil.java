@@ -1,13 +1,13 @@
 package com.sismics.docs.core.util;
 
+import com.sismics.util.EnvironmentUtil;
+import org.apache.commons.lang.StringUtils;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import org.apache.commons.lang.StringUtils;
-
-import com.sismics.util.EnvironmentUtil;
+import java.util.ResourceBundle;
 
 /**
  * Utilities to gain access to the storage directories used by the application.
@@ -22,6 +22,7 @@ public class DirectoryUtil {
      */
     public static Path getBaseDataDirectory() {
         Path baseDataDir = null;
+        ResourceBundle configBundle = ConfigUtil.getConfigBundle();
         if (StringUtils.isNotBlank(EnvironmentUtil.getDocsHome())) {
             // If the docs.home property is set then use it
             baseDataDir = Paths.get(EnvironmentUtil.getDocsHome());
@@ -31,7 +32,7 @@ public class DirectoryUtil {
         } else {
             // We are in a webapp environment and nothing is specified, use the default directory for this OS
             if (EnvironmentUtil.isUnix()) {
-                baseDataDir = Paths.get("/var/docs");
+                baseDataDir = Paths.get(configBundle.getString("unix_dir"));
             } if (EnvironmentUtil.isWindows()) {
                 baseDataDir = Paths.get(EnvironmentUtil.getWindowsAppData() + "\\Sismics\\Docs");
             } else if (EnvironmentUtil.isMacOs()) {
