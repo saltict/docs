@@ -27,6 +27,8 @@ import com.sismics.util.context.ThreadLocalContext;
 import com.sismics.util.mime.MimeType;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -56,6 +58,11 @@ import java.util.zip.ZipOutputStream;
  */
 @Path("/file")
 public class FileResource extends BaseResource {
+    /**
+     * Logger.
+     */
+    private static final Logger log = LoggerFactory.getLogger(ServerException.class);
+
     /**
      * Add a file (with or without a document).
      *
@@ -361,16 +368,18 @@ public class FileResource extends BaseResource {
         JsonArrayBuilder files = Json.createArrayBuilder();
         for (File fileDb : fileList) {
             try {
-                files.add(Json.createObjectBuilder()
+                JsonObjectBuilder file = Json.createObjectBuilder()
                         .add("id", fileDb.getId())
                         .add("processing", FileUtil.isProcessingFile(fileDb.getId()))
                         .add("name", JsonUtil.nullable(fileDb.getName()))
                         .add("mimetype", fileDb.getMimeType())
                         .add("document_id", JsonUtil.nullable(fileDb.getDocumentId()))
                         .add("create_date", fileDb.getCreateDate().getTime())
-                        .add("size", Files.size(DirectoryUtil.getStorageDirectory().resolve(fileDb.getId()))));
+                        .add("size", Files.size(DirectoryUtil.getStorageDirectory().resolve(fileDb.getId())));
+                files.add(file);
             } catch (IOException e) {
-                throw new ServerException("FileError", "Unable to get the size of " + fileDb.getId(), e);
+                log.error("Unable to get file " + fileDb.getId());
+//                throw new ServerException("FileError", "Unable to get the size of " + fileDb.getId(), e);
             }
         }
         
