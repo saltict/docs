@@ -316,64 +316,64 @@ public class AppResource extends BaseResource {
      *
      * @return Response
      */
-    @GET
-    @Path("config_inbox")
-    public Response getConfigInbox() {
-        if (!authenticate()) {
-            throw new ForbiddenClientException();
-        }
-        checkBaseFunction(BaseFunction.ADMIN);
-
-        ConfigDao configDao = new ConfigDao();
-        Boolean enabled = ConfigUtil.getConfigBooleanValue(ConfigType.INBOX_ENABLED);
-        Config hostnameConfig = configDao.getById(ConfigType.INBOX_HOSTNAME);
-        Config portConfig = configDao.getById(ConfigType.INBOX_PORT);
-        Config usernameConfig = configDao.getById(ConfigType.INBOX_USERNAME);
-        Config passwordConfig = configDao.getById(ConfigType.INBOX_PASSWORD);
-        Config tagConfig = configDao.getById(ConfigType.INBOX_TAG);
-        JsonObjectBuilder response = Json.createObjectBuilder();
-
-        response.add("enabled", enabled);
-        if (hostnameConfig == null) {
-            response.addNull("hostname");
-        } else {
-            response.add("hostname", hostnameConfig.getValue());
-        }
-        if (portConfig == null) {
-            response.addNull("port");
-        } else {
-            response.add("port", Integer.valueOf(portConfig.getValue()));
-        }
-        if (usernameConfig == null) {
-            response.addNull("username");
-        } else {
-            response.add("username", usernameConfig.getValue());
-        }
-        if (passwordConfig == null) {
-            response.addNull("password");
-        } else {
-            response.add("password", passwordConfig.getValue());
-        }
-        if (tagConfig == null) {
-            response.addNull("tag");
-        } else {
-            response.add("tag", tagConfig.getValue());
-        }
-
-        // Informations about the last synchronization
-        InboxService inboxService = AppContext.getInstance().getInboxService();
-        JsonObjectBuilder lastSync = Json.createObjectBuilder();
-        if (inboxService.getLastSyncDate() == null) {
-            lastSync.addNull("date");
-        } else {
-            lastSync.add("date", inboxService.getLastSyncDate().getTime());
-        }
-        lastSync.add("error", JsonUtil.nullable(inboxService.getLastSyncError()));
-        lastSync.add("count", inboxService.getLastSyncMessageCount());
-        response.add("last_sync", lastSync);
-
-        return Response.ok().entity(response.build()).build();
-    }
+//    @GET
+//    @Path("config_inbox")
+//    public Response getConfigInbox() {
+//        if (!authenticate()) {
+//            throw new ForbiddenClientException();
+//        }
+//        checkBaseFunction(BaseFunction.ADMIN);
+//
+//        ConfigDao configDao = new ConfigDao();
+//        Boolean enabled = ConfigUtil.getConfigBooleanValue(ConfigType.INBOX_ENABLED);
+//        Config hostnameConfig = configDao.getById(ConfigType.INBOX_HOSTNAME);
+//        Config portConfig = configDao.getById(ConfigType.INBOX_PORT);
+//        Config usernameConfig = configDao.getById(ConfigType.INBOX_USERNAME);
+//        Config passwordConfig = configDao.getById(ConfigType.INBOX_PASSWORD);
+//        Config tagConfig = configDao.getById(ConfigType.INBOX_TAG);
+//        JsonObjectBuilder response = Json.createObjectBuilder();
+//
+//        response.add("enabled", enabled);
+//        if (hostnameConfig == null) {
+//            response.addNull("hostname");
+//        } else {
+//            response.add("hostname", hostnameConfig.getValue());
+//        }
+//        if (portConfig == null) {
+//            response.addNull("port");
+//        } else {
+//            response.add("port", Integer.valueOf(portConfig.getValue()));
+//        }
+//        if (usernameConfig == null) {
+//            response.addNull("username");
+//        } else {
+//            response.add("username", usernameConfig.getValue());
+//        }
+//        if (passwordConfig == null) {
+//            response.addNull("password");
+//        } else {
+//            response.add("password", passwordConfig.getValue());
+//        }
+//        if (tagConfig == null) {
+//            response.addNull("tag");
+//        } else {
+//            response.add("tag", tagConfig.getValue());
+//        }
+//
+//        // Informations about the last synchronization
+//        InboxService inboxService = AppContext.getInstance().getInboxService();
+//        JsonObjectBuilder lastSync = Json.createObjectBuilder();
+//        if (inboxService.getLastSyncDate() == null) {
+//            lastSync.addNull("date");
+//        } else {
+//            lastSync.add("date", inboxService.getLastSyncDate().getTime());
+//        }
+//        lastSync.add("error", JsonUtil.nullable(inboxService.getLastSyncError()));
+//        lastSync.add("count", inboxService.getLastSyncMessageCount());
+//        response.add("last_sync", lastSync);
+//
+//        return Response.ok().entity(response.build()).build();
+//    }
 
     /**
      * Configure the inbox.
@@ -400,44 +400,44 @@ public class AppResource extends BaseResource {
      * @param tag Tag for created documents
      * @return Response
      */
-    @POST
-    @Path("config_inbox")
-    public Response configInbox(@FormParam("enabled") Boolean enabled,
-                                @FormParam("hostname") String hostname,
-                                @FormParam("port") String portStr,
-                                @FormParam("username") String username,
-                                @FormParam("password") String password,
-                                @FormParam("tag") String tag) {
-        if (!authenticate()) {
-            throw new ForbiddenClientException();
-        }
-        checkBaseFunction(BaseFunction.ADMIN);
-        ValidationUtil.validateRequired(enabled, "enabled");
-        if (!Strings.isNullOrEmpty(portStr)) {
-            ValidationUtil.validateInteger(portStr, "port");
-        }
-
-        // Just update the changed configuration
-        ConfigDao configDao = new ConfigDao();
-        configDao.update(ConfigType.INBOX_ENABLED, enabled.toString());
-        if (!Strings.isNullOrEmpty(hostname)) {
-            configDao.update(ConfigType.INBOX_HOSTNAME, hostname);
-        }
-        if (!Strings.isNullOrEmpty(portStr)) {
-            configDao.update(ConfigType.INBOX_PORT, portStr);
-        }
-        if (!Strings.isNullOrEmpty(username)) {
-            configDao.update(ConfigType.INBOX_USERNAME, username);
-        }
-        if (!Strings.isNullOrEmpty(password)) {
-            configDao.update(ConfigType.INBOX_PASSWORD, password);
-        }
-        if (!Strings.isNullOrEmpty(tag)) {
-            configDao.update(ConfigType.INBOX_TAG, tag);
-        }
-
-        return Response.ok().build();
-    }
+//    @POST
+//    @Path("config_inbox")
+//    public Response configInbox(@FormParam("enabled") Boolean enabled,
+//                                @FormParam("hostname") String hostname,
+//                                @FormParam("port") String portStr,
+//                                @FormParam("username") String username,
+//                                @FormParam("password") String password,
+//                                @FormParam("tag") String tag) {
+//        if (!authenticate()) {
+//            throw new ForbiddenClientException();
+//        }
+//        checkBaseFunction(BaseFunction.ADMIN);
+//        ValidationUtil.validateRequired(enabled, "enabled");
+//        if (!Strings.isNullOrEmpty(portStr)) {
+//            ValidationUtil.validateInteger(portStr, "port");
+//        }
+//
+//        // Just update the changed configuration
+//        ConfigDao configDao = new ConfigDao();
+//        configDao.update(ConfigType.INBOX_ENABLED, enabled.toString());
+//        if (!Strings.isNullOrEmpty(hostname)) {
+//            configDao.update(ConfigType.INBOX_HOSTNAME, hostname);
+//        }
+//        if (!Strings.isNullOrEmpty(portStr)) {
+//            configDao.update(ConfigType.INBOX_PORT, portStr);
+//        }
+//        if (!Strings.isNullOrEmpty(username)) {
+//            configDao.update(ConfigType.INBOX_USERNAME, username);
+//        }
+//        if (!Strings.isNullOrEmpty(password)) {
+//            configDao.update(ConfigType.INBOX_PASSWORD, password);
+//        }
+//        if (!Strings.isNullOrEmpty(tag)) {
+//            configDao.update(ConfigType.INBOX_TAG, tag);
+//        }
+//
+//        return Response.ok().build();
+//    }
 
     /**
      * Test the inbox.
@@ -452,18 +452,18 @@ public class AppResource extends BaseResource {
      *
      * @return Response
      */
-    @POST
-    @Path("test_inbox")
-    public Response testInbox() {
-        if (!authenticate()) {
-            throw new ForbiddenClientException();
-        }
-        checkBaseFunction(BaseFunction.ADMIN);
-
-        return Response.ok().entity(Json.createObjectBuilder()
-                .add("count", AppContext.getInstance().getInboxService().testInbox())
-                .build()).build();
-    }
+//    @POST
+//    @Path("test_inbox")
+//    public Response testInbox() {
+//        if (!authenticate()) {
+//            throw new ForbiddenClientException();
+//        }
+//        checkBaseFunction(BaseFunction.ADMIN);
+//
+//        return Response.ok().entity(Json.createObjectBuilder()
+//                .add("count", AppContext.getInstance().getInboxService().testInbox())
+//                .build()).build();
+//    }
 
     /**
      * Retrieve the application logs.

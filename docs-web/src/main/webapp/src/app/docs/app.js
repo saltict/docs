@@ -136,15 +136,15 @@ angular.module('docs',
         }
       }
     })
-    .state('settings.inbox', {
-      url: '/inbox',
-      views: {
-        'settings': {
-          templateUrl: 'partial/docs/settings.inbox.html',
-          controller: 'SettingsInbox'
-        }
-      }
-    })
+    // .state('settings.inbox', {
+    //   url: '/inbox',
+    //   views: {
+    //     'settings': {
+    //       templateUrl: 'partial/docs/settings.inbox.html',
+    //       controller: 'SettingsInbox'
+    //     }
+    //   }
+    // })
     .state('settings.user', {
       url: '/user',
       views: {
