@@ -51,7 +51,7 @@ public class RouteStep {
     /**
      * Comment.
      */
-    @Column(name = "RTP_COMMENT_C", length = 500)
+    @Column(name = "RTP_COMMENT_C")
     private String comment;
 
     /**
