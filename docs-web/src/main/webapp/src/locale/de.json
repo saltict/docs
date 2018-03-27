@@ -165,6 +165,7 @@
       "add_new_document": "Neues Dokument hinzufügen",
       "latest_activity": "Letzte Aktivitäten",
       "footer_sismics": "Programmiert mit <span class=\"fas fa-heart\"></span> by <a href=\"https://www.sismics.com\" target=\"_blank\">Sismics</a>",
+      "footer_medprove_docs": "Urheberrechte © MedProve Inc 2018",
       "api_documentation": "API Dokumentation",
       "feedback": "Geben Sie uns Feedback",
       "workflow_document_list": "Mir zugeordnete Dokumente"

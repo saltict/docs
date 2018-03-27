@@ -162,6 +162,7 @@
       "add_new_document": "Ajouter à un nouveau document",
       "latest_activity": "Activité récente",
       "footer_sismics": "Conçu avec <span class=\"fas fa-heart\"></span> par <a href=\"https://www.sismics.com\" target=\"_blank\">Sismics</a>",
+      "footer_medprove_docs": "Roits d'auteur © MedProve Inc 2018",
       "api_documentation": "Documentation API",
       "feedback": "Donnez-nous votre avis"
     },

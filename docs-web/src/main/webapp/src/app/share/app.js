@@ -129,7 +129,7 @@ angular.module('share',
   $rootScope.$stateParams = $stateParams;
 
   // Fetch the current theme configuration
-  $rootScope.appName = '';
+  $rootScope.appName = 'MedProve Docs';
   Restangular.one('theme').get().then(function(data) {
     $rootScope.appName = data.name;
   });
