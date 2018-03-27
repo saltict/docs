@@ -861,27 +861,27 @@ public class UserResource extends BaseResource {
      *
      * @return Response
      */
-    @POST
-    @Path("enable_totp")
-    public Response enableTotp() {
-        if (!authenticate() || principal.isGuest()) {
-            throw new ForbiddenClientException();
-        }
-        
-        // Create a new TOTP key
-        GoogleAuthenticator gAuth = new GoogleAuthenticator();
-        final GoogleAuthenticatorKey key = gAuth.createCredentials();
-        
-        // Save it
-        UserDao userDao = new UserDao();
-        User user = userDao.getActiveByUsername(principal.getName());
-        user.setTotpKey(key.getKey());
-        userDao.update(user, principal.getId());
-        
-        JsonObjectBuilder response = Json.createObjectBuilder()
-                .add("secret", key.getKey());
-        return Response.ok().entity(response.build()).build();
-    }
+//    @POST
+//    @Path("enable_totp")
+//    public Response enableTotp() {
+//        if (!authenticate() || principal.isGuest()) {
+//            throw new ForbiddenClientException();
+//        }
+//
+//        // Create a new TOTP key
+//        GoogleAuthenticator gAuth = new GoogleAuthenticator();
+//        final GoogleAuthenticatorKey key = gAuth.createCredentials();
+//
+//        // Save it
+//        UserDao userDao = new UserDao();
+//        User user = userDao.getActiveByUsername(principal.getName());
+//        user.setTotpKey(key.getKey());
+//        userDao.update(user, principal.getId());
+//
+//        JsonObjectBuilder response = Json.createObjectBuilder()
+//                .add("secret", key.getKey());
+//        return Response.ok().entity(response.build()).build();
+//    }
     
     /**
      * Disable time-based one-time password.
@@ -899,32 +899,32 @@ public class UserResource extends BaseResource {
      * @param password Password
      * @return Response
      */
-    @POST
-    @Path("disable_totp")
-    public Response disableTotp(@FormParam("password") String password) {
-        if (!authenticate() || principal.isGuest()) {
-            throw new ForbiddenClientException();
-        }
-        
-        // Validate the input data
-        password = ValidationUtil.validateLength(password, "password", 1, 100, false);
-
-        // Check the password and get the user
-        UserDao userDao = new UserDao();
-        User user = userDao.authenticate(principal.getName(), password);
-        if (user == null) {
-            throw new ForbiddenClientException();
-        }
-        
-        // Remove the TOTP key
-        user.setTotpKey(null);
-        userDao.update(user, principal.getId());
-        
-        // Always return OK
-        JsonObjectBuilder response = Json.createObjectBuilder()
-                .add("status", "ok");
-        return Response.ok().entity(response.build()).build();
-    }
+//    @POST
+//    @Path("disable_totp")
+//    public Response disableTotp(@FormParam("password") String password) {
+//        if (!authenticate() || principal.isGuest()) {
+//            throw new ForbiddenClientException();
+//        }
+//
+//        // Validate the input data
+//        password = ValidationUtil.validateLength(password, "password", 1, 100, false);
+//
+//        // Check the password and get the user
+//        UserDao userDao = new UserDao();
+//        User user = userDao.authenticate(principal.getName(), password);
+//        if (user == null) {
+//            throw new ForbiddenClientException();
+//        }
+//
+//        // Remove the TOTP key
+//        user.setTotpKey(null);
+//        userDao.update(user, principal.getId());
+//
+//        // Always return OK
+//        JsonObjectBuilder response = Json.createObjectBuilder()
+//                .add("status", "ok");
+//        return Response.ok().entity(response.build()).build();
+//    }
 
     /**
      * Create a key to reset a password and send it by email.
