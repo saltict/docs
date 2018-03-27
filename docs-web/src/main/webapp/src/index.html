@@ -125,10 +125,10 @@
           <li ui-sref-active="{ active: 'document.**' }">
             <a href="#/document"><span class="fas fa-book"></span> {{ 'index.nav_documents' | translate }}</a>
           </li>
-          <li ui-sref-active="{ active: 'tag.**' }">
+          <li ui-sref-active="{ active: 'tag.**' }" ng-show="isAdmin">
             <a href="#/tag"><span class="fas fa-tags"></span> {{ 'index.nav_tags' | translate }}</a>
           </li>
-          <li ui-sref-active="{ active: 'user.**', active2: 'group.**' }">
+          <li ui-sref-active="{ active: 'user.**', active2: 'group.**' }" ng-show="isAdmin">
             <a href="#/user"><span class="fas fa-user"></span> {{ 'index.nav_users_groups' | translate }}</a>
           </li>
         </ul>

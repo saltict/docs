@@ -10,6 +10,7 @@ import com.sismics.docs.core.dao.jpa.dto.TagDto;
 import com.sismics.docs.core.model.jpa.Acl;
 import com.sismics.docs.core.model.jpa.Tag;
 import com.sismics.docs.core.util.jpa.SortCriteria;
+import com.sismics.docs.rest.constant.BaseFunction;
 import com.sismics.rest.exception.ClientException;
 import com.sismics.rest.exception.ForbiddenClientException;
 import com.sismics.rest.util.AclUtil;
@@ -173,6 +174,7 @@ public class TagResource extends BaseResource {
         if (!authenticate()) {
             throw new ForbiddenClientException();
         }
+        checkBaseFunction(BaseFunction.ADMIN);
         
         // Validate input data
         name = ValidationUtil.validateLength(name, "name", 1, 36, false);
@@ -258,6 +260,7 @@ public class TagResource extends BaseResource {
         if (!authenticate()) {
             throw new ForbiddenClientException();
         }
+        checkBaseFunction(BaseFunction.ADMIN);
         
         // Validate input data
         name = ValidationUtil.validateLength(name, "name", 1, 36, true);
@@ -325,6 +328,7 @@ public class TagResource extends BaseResource {
         if (!authenticate()) {
             throw new ForbiddenClientException();
         }
+        checkBaseFunction(BaseFunction.ADMIN);
         
         // Get the tag
         AclDao aclDao = new AclDao();

@@ -11,6 +11,7 @@ angular.module('docs').controller('Navigation', function($scope, $state, $rootSc
         location: 'replace'
       });
     }
+      $rootScope.isAdmin = data.base_functions.indexOf('ADMIN') !== -1;
   });
 
   /**
