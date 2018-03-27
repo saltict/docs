@@ -830,82 +830,82 @@ public class DocumentResource extends BaseResource {
      * @param fileBodyPart File to import
      * @return Response
      */
-    @PUT
-    @Path("eml")
-    @Consumes("multipart/form-data")
-    public Response importEml(@FormDataParam("file") FormDataBodyPart fileBodyPart) {
-        if (!authenticate()) {
-            throw new ForbiddenClientException();
-        }
-
-        // Validate input data
-        ValidationUtil.validateRequired(fileBodyPart, "file");
-
-        // Save the file to a temporary file
-        java.nio.file.Path unencryptedFile;
-        try {
-            unencryptedFile = ThreadLocalContext.get().createTemporaryFile();
-            Files.copy(fileBodyPart.getValueAs(InputStream.class), unencryptedFile, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            throw new ServerException("StreamError", "Error reading the input file", e);
-        }
-
-        // Read the EML file
-        Properties props = new Properties();
-        Session mailSession = Session.getDefaultInstance(props, null);
-        EmailUtil.MailContent mailContent = new EmailUtil.MailContent();
-        try (InputStream inputStream = Files.newInputStream(unencryptedFile)) {
-            Message message = new MimeMessage(mailSession, inputStream);
-            mailContent.setSubject(message.getSubject());
-            mailContent.setDate(message.getSentDate());
-            EmailUtil.parseMailContent(message, mailContent);
-        } catch (IOException | MessagingException e) {
-            throw new ServerException("StreamError", "Error reading the temporary file", e);
-        }
-
-        // Create the document
-        Document document = new Document();
-        document.setUserId(principal.getId());
-        if (mailContent.getSubject() == null) {
-            document.setTitle("Imported email from EML file");
-        } else {
-            document.setTitle(StringUtils.abbreviate(mailContent.getSubject(), 100));
-        }
-        document.setDescription(StringUtils.abbreviate(mailContent.getMessage(), 4000));
-        document.setSubject(StringUtils.abbreviate(mailContent.getSubject(), 500));
-        document.setFormat("EML");
-        document.setSource("Email");
-        document.setLanguage(ConfigUtil.getConfigStringValue(ConfigType.DEFAULT_LANGUAGE));
-        if (mailContent.getDate() == null) {
-            document.setCreateDate(new Date());
-        } else {
-            document.setCreateDate(mailContent.getDate());
-        }
-
-        // Save the document, create the base ACLs
-        document = DocumentUtil.createDocument(document, principal.getId());
-
-        // Raise a document created event
-        DocumentCreatedAsyncEvent documentCreatedAsyncEvent = new DocumentCreatedAsyncEvent();
-        documentCreatedAsyncEvent.setUserId(principal.getId());
-        documentCreatedAsyncEvent.setDocument(document);
-        ThreadLocalContext.get().addAsyncEvent(documentCreatedAsyncEvent);
-
-        // Add files to the document
-        try {
-            for (EmailUtil.FileContent fileContent : mailContent.getFileContentList()) {
-                FileUtil.createFile(fileContent.getName(), fileContent.getFile(), fileContent.getSize(), "eng", principal.getId(), document.getId());
-            }
-        } catch (IOException e) {
-            throw new ClientException(e.getMessage(), e.getMessage(), e);
-        } catch (Exception e) {
-            throw new ServerException("FileError", "Error adding a file", e);
-        }
-
-        JsonObjectBuilder response = Json.createObjectBuilder()
-                .add("id", document.getId());
-        return Response.ok().entity(response.build()).build();
-    }
+//    @PUT
+//    @Path("eml")
+//    @Consumes("multipart/form-data")
+//    public Response importEml(@FormDataParam("file") FormDataBodyPart fileBodyPart) {
+//        if (!authenticate()) {
+//            throw new ForbiddenClientException();
+//        }
+//
+//        // Validate input data
+//        ValidationUtil.validateRequired(fileBodyPart, "file");
+//
+//        // Save the file to a temporary file
+//        java.nio.file.Path unencryptedFile;
+//        try {
+//            unencryptedFile = ThreadLocalContext.get().createTemporaryFile();
+//            Files.copy(fileBodyPart.getValueAs(InputStream.class), unencryptedFile, StandardCopyOption.REPLACE_EXISTING);
+//        } catch (IOException e) {
+//            throw new ServerException("StreamError", "Error reading the input file", e);
+//        }
+//
+//        // Read the EML file
+//        Properties props = new Properties();
+//        Session mailSession = Session.getDefaultInstance(props, null);
+//        EmailUtil.MailContent mailContent = new EmailUtil.MailContent();
+//        try (InputStream inputStream = Files.newInputStream(unencryptedFile)) {
+//            Message message = new MimeMessage(mailSession, inputStream);
+//            mailContent.setSubject(message.getSubject());
+//            mailContent.setDate(message.getSentDate());
+//            EmailUtil.parseMailContent(message, mailContent);
+//        } catch (IOException | MessagingException e) {
+//            throw new ServerException("StreamError", "Error reading the temporary file", e);
+//        }
+//
+//        // Create the document
+//        Document document = new Document();
+//        document.setUserId(principal.getId());
+//        if (mailContent.getSubject() == null) {
+//            document.setTitle("Imported email from EML file");
+//        } else {
+//            document.setTitle(StringUtils.abbreviate(mailContent.getSubject(), 100));
+//        }
+//        document.setDescription(StringUtils.abbreviate(mailContent.getMessage(), 4000));
+//        document.setSubject(StringUtils.abbreviate(mailContent.getSubject(), 500));
+//        document.setFormat("EML");
+//        document.setSource("Email");
+//        document.setLanguage(ConfigUtil.getConfigStringValue(ConfigType.DEFAULT_LANGUAGE));
+//        if (mailContent.getDate() == null) {
+//            document.setCreateDate(new Date());
+//        } else {
+//            document.setCreateDate(mailContent.getDate());
+//        }
+//
+//        // Save the document, create the base ACLs
+//        document = DocumentUtil.createDocument(document, principal.getId());
+//
+//        // Raise a document created event
+//        DocumentCreatedAsyncEvent documentCreatedAsyncEvent = new DocumentCreatedAsyncEvent();
+//        documentCreatedAsyncEvent.setUserId(principal.getId());
+//        documentCreatedAsyncEvent.setDocument(document);
+//        ThreadLocalContext.get().addAsyncEvent(documentCreatedAsyncEvent);
+//
+//        // Add files to the document
+//        try {
+//            for (EmailUtil.FileContent fileContent : mailContent.getFileContentList()) {
+//                FileUtil.createFile(fileContent.getName(), fileContent.getFile(), fileContent.getSize(), "eng", principal.getId(), document.getId());
+//            }
+//        } catch (IOException e) {
+//            throw new ClientException(e.getMessage(), e.getMessage(), e);
+//        } catch (Exception e) {
+//            throw new ServerException("FileError", "Error adding a file", e);
+//        }
+//
+//        JsonObjectBuilder response = Json.createObjectBuilder()
+//                .add("id", document.getId());
+//        return Response.ok().entity(response.build()).build();
+//    }
 
     /**
      * Deletes a document.

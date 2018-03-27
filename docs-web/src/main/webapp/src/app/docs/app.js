@@ -110,14 +110,14 @@ angular.module('docs',
         }
       }
     })
-    .state('settings.fileimporter', {
-      url: '/fileimporter',
-      views: {
-        'settings': {
-          templateUrl: 'partial/docs/settings.fileimporter.html'
-        }
-      }
-    })
+    // .state('settings.fileimporter', {
+    //   url: '/fileimporter',
+    //   views: {
+    //     'settings': {
+    //       templateUrl: 'partial/docs/settings.fileimporter.html'
+    //     }
+    //   }
+    // })
     .state('settings.log', {
       url: '/log',
       views: {
