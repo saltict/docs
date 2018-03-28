@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-10">
+  <div class="col-md-12">
     <div>
       <div class="pull-right">
         <div class="dropdown" uib-dropdown>
@@ -67,8 +67,8 @@
 
     <div class="row" ng-show="files.length > 0">
       <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 text-center" ng-repeat="file in files">
-        <div class="thumbnail">
-          <a ng-click="openFile(file)">
+        <div class="thumbnail" >
+          <a class="file-thumbnail" ng-click="openFile(file)">
             <img ng-src="../api/file/{{ file.id }}/data?size=thumb&share={{ $stateParams.shareId }}"
                  uib-tooltip="{{ file.mimetype }} | {{ file.size | filesize }}" tooltip-placement="top" />
           </a>
@@ -79,7 +79,7 @@
     <div ui-view="file"></div>
   </div>
 
-  <div class="col-md-2">
+  <div class="col-md-12">
     <p class="page-header">
       <span class="fas fa-comments"></span>
       {{ 'document.view.comments' | translate }}
@@ -99,10 +99,11 @@
       <div class="media-body">
         <strong>{{ comment.creator }}</strong>
         <p>
-          {{ comment.content }}<br />
+          <div ng-bind-html="comment.content | newline"></div>
           <span class="text-muted">{{ comment.create_date | date: 'yyyy-MM-dd' }}</span>
         </p>
       </div>
     </div>
+    <br>
   </div>
 </div>

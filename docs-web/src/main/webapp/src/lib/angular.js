@@ -13262,7 +13262,7 @@
          *     angular.module('intervalExample', [])
          *       .controller('ExampleController', ['$scope', '$interval',
          *         function($scope, $interval) {
-      *           $scope.format = 'M/d/yy h:mm:ss a';
+      *           $scope.format = 'dd/MM/yyyy h:mm:ss a';
       *           $scope.blood_1 = 100;
       *           $scope.blood_2 = 120;
       *
@@ -21647,12 +21647,12 @@
    *
    *   * `'medium'`: equivalent to `'MMM d, y h:mm:ss a'` for en_US locale
    *     (e.g. Sep 3, 2010 12:05:08 PM)
-   *   * `'short'`: equivalent to `'M/d/yy h:mm a'` for en_US  locale (e.g. 9/3/10 12:05 PM)
+   *   * `'short'`: equivalent to `'dd/MM/yyyy h:mm a'` for en_US  locale (e.g. 9/3/10 12:05 PM)
    *   * `'fullDate'`: equivalent to `'EEEE, MMMM d, y'` for en_US  locale
    *     (e.g. Friday, September 3, 2010)
    *   * `'longDate'`: equivalent to `'MMMM d, y'` for en_US  locale (e.g. September 3, 2010)
    *   * `'mediumDate'`: equivalent to `'MMM d, y'` for en_US  locale (e.g. Sep 3, 2010)
-   *   * `'shortDate'`: equivalent to `'M/d/yy'` for en_US locale (e.g. 9/3/10)
+   *   * `'shortDate'`: equivalent to `'dd/MM/yyyy'` for en_US locale (e.g. 9/3/10)
    *   * `'mediumTime'`: equivalent to `'h:mm:ss a'` for en_US locale (e.g. 12:05:08 PM)
    *   * `'shortTime'`: equivalent to `'h:mm a'` for en_US locale (e.g. 12:05 PM)
    *
@@ -33841,8 +33841,8 @@
         "medium": "MMM d, y h:mm:ss a",
         "mediumDate": "MMM d, y",
         "mediumTime": "h:mm:ss a",
-        "short": "M/d/yy h:mm a",
-        "shortDate": "M/d/yy",
+        "short": "dd/MM/yyyy h:mm a",
+        "shortDate": "dd/MM/yyyy",
         "shortTime": "h:mm a"
       },
       "NUMBER_FORMATS": {

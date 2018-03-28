@@ -68,8 +68,8 @@
 	  </ul>
 	</div>
 
-  <div class="row">
-    <div class="col-md-9">
+  <div class="row custom-row">
+    <div class="col-md-12">
       <ul class="nav nav-tabs">
         <li ng-class="{ active: $state.current.name == 'document.view.content' }">
           <a href="#/document/view/{{ document.id }}/content">
@@ -94,7 +94,7 @@
       </ul>
       <div ui-view="tab"></div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-12">
       <div ng-show="document.route_step">
         <p class="page-header page-header-side">
           <span class="fas fa-random"></span>
@@ -110,7 +110,7 @@
             <span class="label label-default"><acl data="document.route_step.target"></acl></span>
           </p>
           <p ng-show="document.route_step.transitionable">
-            <textarea ng-model="workflowComment" maxlength="500" class="form-control mb-10"
+            <textarea ng-model="workflowComment" rows="5" class="form-control mb-10"
                       ng-attr-placeholder="{{ 'document.view.workflow_comment' | translate }}"></textarea>
             <span class="btn btn-primary"
                   ng-show="document.route_step.type == 'VALIDATE'"
@@ -150,22 +150,26 @@
         <div class="media-body">
           <strong>{{ comment.creator }}</strong>
           <p>
-            {{ comment.content }}<br />
-            <span class="text-muted">{{ comment.create_date | timeAgo: dateTimeFormat }}</span>
-          <span class="text-muted pull-right btn-link pointer"
-                ng-show="document.writable || userInfo.username == comment.creator"
-                ng-click="deleteComment(comment)">
-            <span class="fas fa-times"></span>
-          </span>
+            <div class="comment-content" ng-bind-html="comment.content | newline "></div>
+            <span class="text-muted">{{ comment.create_date | timeAgo: dateTimeFormat }} | </span>
+            <span class="text-danger pointer"
+                  ng-show="document.writable || userInfo.username == comment.creator"
+                  ng-click="deleteComment(comment)">
+              {{ 'delete' | translate }}
+            </span>
           </p>
         </div>
       </div>
 
-      <form ng-submit="addComment()">
+      <form class="clearfix">
         <div class="form-group">
           <label class="sr-only" for="commentInput">{{ 'document.view.add_comment' | translate }}</label>
-          <input type="text" class="form-control" id="commentInput" ng-model="comment" ng-attr-placeholder="{{ 'document.view.add_comment' | translate }}">
+          <textarea class="form-control" id="commentInput" rows="3" ng-model="comment" ng-attr-placeholder="{{ 'document.view.add_comment' | translate }}"></textarea>
         </div>
+        <div class="text-center">
+          <button class="btn btn-primary" ng-click="addComment()">{{ 'document.view.add_comment' | translate }}</button>
+        </div>
+        <br>
       </form>
     </div>
   </div>

@@ -92,15 +92,6 @@ angular.module('docs',
         }
       }
     })
-    // .state('settings.security', {
-    //   url: '/security',
-    //   views: {
-    //     'settings': {
-    //       templateUrl: 'partial/docs/settings.security.html',
-    //       controller: 'SettingsSecurity'
-    //     }
-    //   }
-    // })
     .state('settings.session', {
       url: '/session',
       views: {
@@ -110,14 +101,6 @@ angular.module('docs',
         }
       }
     })
-    // .state('settings.fileimporter', {
-    //   url: '/fileimporter',
-    //   views: {
-    //     'settings': {
-    //       templateUrl: 'partial/docs/settings.fileimporter.html'
-    //     }
-    //   }
-    // })
     .state('settings.log', {
       url: '/log',
       views: {
@@ -136,15 +119,6 @@ angular.module('docs',
         }
       }
     })
-    // .state('settings.inbox', {
-    //   url: '/inbox',
-    //   views: {
-    //     'settings': {
-    //       templateUrl: 'partial/docs/settings.inbox.html',
-    //       controller: 'SettingsInbox'
-    //     }
-    //   }
-    // })
     .state('settings.user', {
       url: '/user',
       views: {

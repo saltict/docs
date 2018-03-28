@@ -97,6 +97,10 @@ angular.module('docs').controller('DocumentEdit', function($rootScope, $scope, $
       promise = Restangular.one('document', $stateParams.id).post('', document);
     } else {
       promise = Restangular.one('document').put(document);
+      // Get current Id after submit
+      promise.then(function (data) {
+          $scope.curDocumentId = data.id;
+      });
     }
 
     // Attach orphan files after edition
@@ -130,6 +134,7 @@ angular.module('docs').controller('DocumentEdit', function($rootScope, $scope, $
 
             $scope.resetForm();
             $scope.loadDocuments();
+            $state.go('document.view', { id: $scope.curDocumentId });
           }
         });
       };

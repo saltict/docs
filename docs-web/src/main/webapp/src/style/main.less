@@ -5,7 +5,6 @@
   img {
     width: 44px;
     height: 44px;
-    border-radius: 50%;
   }
 }
 
@@ -111,18 +110,26 @@ ul.tag-tree {
 .table-documents {
   margin-top: 18px !important;
 
+  thead {
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+    border-top: 1px solid #eee;
+  }
+
   thead th {
     cursor: pointer;
     white-space: nowrap;
+    padding-top: 12px !important;
     text-transform: uppercase;
     font-weight: 500;
     background-color: #bdbdbd17;
     border: none !important;
     font-size: 90%;
   }
-	
+
   tbody tr {
     cursor: pointer;
+    border: 1px solid #eee;
 
     td {
       .label {
@@ -172,7 +179,7 @@ ul.tag-tree {
     &:first-child {
       white-space: nowrap;
     }
-    
+
     .cell-message {
       word-wrap: break-word;
     }
@@ -181,9 +188,17 @@ ul.tag-tree {
 
 // File view
 .modal-fileview {
-	top: 2%;
-	max-height: 96%;
-	overflow-y: scroll;
+  top: 0;
+  overflow-y: scroll;
+
+  .modal-dialog {
+    @media (min-width:1200px) {
+      width: 1200px;
+    }
+  }
+
+  .modal-content {
+  }
 
   img {
     width: 100%;
@@ -191,20 +206,23 @@ ul.tag-tree {
 }
 
 // File thumbnails
+
 .thumbnail {
   .file-processing-indicator {
     position: absolute;
     z-index: 2;
     margin-left: 8px;
     margin-top: 8px;
-    color: #2ab2dc;
+    color: #faaf3f;
   }
 
   a.file-thumbnail {
-    height: 200px;
+    position: relative;
     display: block;
     overflow: hidden;
     background: #eee;
+    padding-top: 67%;
+    height: 0;
   }
 
   .file-name {
@@ -244,7 +262,8 @@ ul.tag-tree {
   img {
     width: 100%;
     cursor: pointer;
-    margin-top: 100px;
+    position: absolute;
+    top: 50%;
     transform: translateY(-50%);
   }
 
@@ -290,21 +309,21 @@ input[readonly].share-link {
 .inline-edit {
 	cursor: pointer;
 	display: block;
-	
+
 	span {
     display: block;
 	}
-	
+
 	input {
 	  display: none;
 	  margin-bottom: 0;
 	}
-	
+
 	&.active {
     span {
 		  display: none;
 		}
-		
+
 		input {
 		  display: inline-block;
 		}
@@ -314,6 +333,9 @@ input[readonly].share-link {
 // Pagination
 .pagination > .active > a {
   cursor: pointer !important;
+  &.focus {
+    outline: none;
+  }
 }
 
 // Pagination box
@@ -323,6 +345,7 @@ input[readonly].share-link {
     width: auto;
     display: inline-block;
     margin: 20px 0;
+    border: 1px solid #ddd;
   }
 }
 
@@ -335,8 +358,16 @@ input[readonly].share-link {
   margin: 14px 0 20px;
 }
 
+.comment-content {
+  margin-bottom: 10px;
+}
+
 // Dirty Bootstrap 3 fix, see https://github.com/twbs/bootstrap/issues/6686
 .row { margin: 0; padding: 0 }
+.custom-row {
+  margin-left: -15px;
+  margin-right: -15px;
+}
 .navbar-nav.navbar-right:last-child {
   margin-right: auto;
 }
@@ -356,8 +387,6 @@ input[readonly].share-link {
 }
 
 .thumbnail-checked {
-  box-shadow: inset 0 1px 2px rgba(27,31,35,0.075), 0 0 0 0.2em rgba(3,102,214,0.3);
-  transition: box-shadow ease-in-out .15s;
 }
 
 .pointer {
@@ -409,8 +438,6 @@ input[readonly].share-link {
 .settings-menu {
   .panel-default {
     border: 1px solid #eee;
-    box-shadow: 0 7px 14px 0 rgba(50,50,93,.1), 0 3px 6px 0 rgba(0,0,0,.07);
-    border-radius: 4px;
 
     & > .panel-heading {
       border-bottom: none;
@@ -437,10 +464,8 @@ input[readonly].share-link {
   margin-bottom: 10px;
 
   .well {
-    box-shadow: 0 7px 14px 0 rgba(50,50,93,.1), 0 3px 6px 0 rgba(0,0,0,.07);
     background: none;
     padding: 0;
-    border-radius: 4px;
 
     .table {
       margin-bottom: 0;
@@ -552,7 +577,6 @@ input[readonly].share-link {
   background: url('../../api/theme/image/background') no-repeat center;
   background-size: cover;
   height: 100%;
-  box-shadow: 0 0 0 1px rgba(136,152,170,.1), 0 15px 35px 0 rgba(49,49,93,.1), 0 5px 15px 0 rgba(0,0,0,.13);
 }
 
 .login-box {
@@ -565,7 +589,6 @@ input[readonly].share-link {
   }
 
   .btn-primary {
-    background-color: #2aabd2;
     border-color: transparent;
   }
 
@@ -581,7 +604,6 @@ input[readonly].share-link {
   z-index: 99998;
   background-color: green;
   color: green;
-  box-shadow: 0 0 10px 0; /* Inherits the font color */
   height: 2px;
   opacity: 0;
 
@@ -655,20 +677,10 @@ input[readonly].share-link {
 
 // BS customizations
 .btn {
-  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
   font-weight: 500;
-  border-radius: 4px;
-  box-shadow: 0 0 0 1px rgba(50,50,93,.1), 0 2px 5px 0 rgba(50,50,93,.08), 0 1px 1.5px 0 rgba(0,0,0,.07), 0 1px 2px 0 rgba(0,0,0,.08), 0 0 0 0 transparent;
 }
 
 .form-control {
-  border-radius: 4px;
-  box-shadow: 0 0 0 1px rgba(49,49,93,.03), 0 2px 5px 0 rgba(49,49,93,.1), 0 1px 2px 0 rgba(0,0,0,.08);
-}
-
-.dropdown-menu {
-  border: none;
-  box-shadow: 0 0 0 1px rgba(136,152,170,.1), 0 15px 35px 0 rgba(49,49,93,.1), 0 5px 15px 0 rgba(0,0,0,.13);
 }
 
 .navbar-default {
@@ -686,15 +698,13 @@ input[readonly].share-link {
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
 .navbar-default .navbar-nav > .active > a:focus {
-  color: #2ab2dc;
+  color: #3272ba;
   background: none;
 }
 
 .well-3d {
   border: 1px solid #eee;
-  box-shadow: 0 7px 14px 0 rgba(50,50,93,.1), 0 3px 6px 0 rgba(0,0,0,.07);
   background: none;
-  border-radius: 4px;
 
   .well-3d-header {
     font-size: 20px;
@@ -727,7 +737,6 @@ input[readonly].share-link {
   background-color: #fff;
   background-clip: border-box;
   border: 1px solid rgba(0,0,0,.125);
-  border-radius: .25em;
   padding: 1.25em;
 }
 

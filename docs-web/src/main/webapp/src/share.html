@@ -51,21 +51,28 @@
   </head>
   <body translate-cloak ng-cloak>
     <div class="navbar navbar-inverse" role="navigation">
-      <div class="navbar-header">
-        <div class="hidden-xs navbar-text navbar-logo">
-          <img src="../api/theme/image/logo" />
+      <div class="container">
+        <div class="row">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#" title="{{appName}}">
+              <img src="./img/logo_dark.svg" alt="{{appName}}" height="26">
+            </a>
+          </div>
         </div>
-
-        <a class="navbar-brand" href="#"> {{ appName }}</a>
       </div>
     </div>
 
-    <div ui-view="page">
+    <div class="container">
+      <div class="custom-row ">
+        <div ui-view="page"></div>
+      </div>
     </div>
 
-    <div class="row" ng-controller="Footer">
-      <div class="col-md-12 footer text-center text-muted">
-        <div translate="document.default.footer_medprove_docs"></div>
+    <div class="clearfix" ng-controller="Footer">
+      <div class="footer text-center text-muted">
+	      <div class="container">
+          <div translate="document.default.footer_medprove_docs"></div>
+	      </div>
       </div>
     </div>
   </body>

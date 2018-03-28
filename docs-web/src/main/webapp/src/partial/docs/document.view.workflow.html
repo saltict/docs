@@ -66,9 +66,9 @@
           {{ step.end_date | timeAgo: dateTimeFormat }}
           by
         <a href="#/user/{{ step.validator_username }}" class="label label-default">{{ step.validator_username }}</a>
-        <span ng-show="step.comment" class="text-">
-          <br/><em>{{ step.comment }}</em>
-        </span>
+        <div ng-show="step.comment">
+          <em ng-bind-html="step.comment | newline"></em>
+        </div>
       </span>
     </td>
   </tr>
