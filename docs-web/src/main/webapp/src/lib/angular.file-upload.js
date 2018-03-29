@@ -1,6 +1,6 @@
 /**!
  * =======================================================================
- * Sismics Docs patch applied to encode filenames with encodeURIComponent.
+ * MedProve Docs patch applied to encode filenames with encodeURIComponent.
  * =======================================================================
  *
  * AngularJS file upload directives and services. Supoorts: file upload/drop/paste, resume, cancel/abort,

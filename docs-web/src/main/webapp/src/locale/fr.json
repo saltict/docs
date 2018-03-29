@@ -405,9 +405,9 @@
   },
   "feedback": {
     "title": "Donnez-nous votre avis",
-    "message": "Vous avez des suggestions ou des questions à propos de Sismics Docs ? Nous vous écoutons !",
+    "message": "Vous avez des suggestions ou des questions à propos de MedProve Docs ? Nous vous écoutons !",
     "sent_title": "Avis envoyé",
-    "sent_message": "Merci pour votre avis ! Cela nous aidera à améliorer Sismics Docs."
+    "sent_message": "Merci pour votre avis ! Cela nous aidera à améliorer MedProve Docs."
   },
   "import": {
     "title": "Import en cours",

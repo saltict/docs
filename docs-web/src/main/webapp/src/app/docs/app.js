@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Sismics Docs application.
+ * MedProve Docs application.
  */
 angular.module('docs',
     // Dependencies

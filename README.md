@@ -1,5 +1,5 @@
 <h3 align="center">
-  <img src="https://www.sismicsdocs.com/img/github-title.png" alt="Sismics Docs" width=500 />
+  <img src="https://www.sismicsdocs.com/img/github-title.png" alt="MedProve Docs" width=500 />
 </h3>
 
 [![Twitter: @sismicsdocs](https://img.shields.io/badge/contact-@sismicsdocs-blue.svg?style=flat)](https://twitter.com/sismicsdocs)
@@ -12,7 +12,7 @@ Docs is an open source, lightweight document management system for individuals a
 
 <hr />
 <h2 align="center">
-  ✨ We just launched a Cloud version of Sismics Docs! Head to <a href="https://www.sismicsdocs.com/">sismicsdocs.com</a> for more informations ✨
+  ✨ We just launched a Cloud version of MedProve Docs! Head to <a href="https://www.sismicsdocs.com/">sismicsdocs.com</a> for more informations ✨
 </h2>
 <hr />
 
@@ -56,7 +56,7 @@ Features
 Install with Docker
 -------------------
 
-From a Docker host, run this command to download and install Sismics Docs. The server will run on <http://[your-docker-host-ip]:8100>.
+From a Docker host, run this command to download and install MedProve Docs. The server will run on <http://[your-docker-host-ip]:8100>.
 **The default admin password is "admin". Don't forget to change it before going to production.**
 
     docker run --rm --name sismics_docs_latest -d -p 8100:8080 -v sismics_docs_latest:/data sismics/docs:latest
@@ -120,10 +120,10 @@ The `master` branch is the default and base branch for the project. It is used f
 Community
 ---------
 
-Get updates on Sismics Docs' development and chat with the project maintainers:
+Get updates on MedProve Docs' development and chat with the project maintainers:
 
 - Follow [@sismicsdocs on Twitter](https://twitter.com/sismicsdocs)
-- Read and subscribe to [The Official Sismics Docs Blog](https://blog.sismicsdocs.com/)
+- Read and subscribe to [The Official MedProve Docs Blog](https://blog.sismicsdocs.com/)
 - Check the [Official Website](https://www.sismicsdocs.com)
 - Join us [on Facebook](https://www.facebook.com/sismicsdocs)
 

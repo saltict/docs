@@ -1,4 +1,4 @@
-The web client and Android application for **Sismics Docs** are only examples
+The web client and Android application for **MedProve Docs** are only examples
 of what is possible with the provided REST API. Everything you see in those apps are
 accessible using the API.
 

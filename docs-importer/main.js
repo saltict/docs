@@ -21,9 +21,9 @@ const prefs = new preferences('com.sismics.docs.importer',{
 });
 
 // Welcome message
-console.log('Sismics Docs Importer 1.0.0, https://www.sismicsdocs.com' +
+console.log('MedProve Docs Importer 1.0.0, https://www.sismicsdocs.com' +
   '\n\n' +
-  'This program let you import files from your system to Sismics Docs' +
+  'This program let you import files from your system to MedProve Docs' +
   '\n');
 
 // Ask for the base URL

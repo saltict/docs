@@ -433,9 +433,9 @@
   },
   "feedback": {
     "title": "Give us a feedback",
-    "message": "Any suggestion or question about Sismics Docs? We listen to you!",
+    "message": "Any suggestion or question about MedProve Docs? We listen to you!",
     "sent_title": "Feedback sent",
-    "sent_message": "Thank you for your feedback! It will help us make Sismics Docs even better."
+    "sent_message": "Thank you for your feedback! It will help us make MedProve Docs even better."
   },
   "import": {
     "title": "Importing",

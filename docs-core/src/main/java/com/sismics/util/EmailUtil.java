@@ -124,11 +124,11 @@ public class EmailUtil {
 
             // Application name
             Config themeConfig = configDao.getById(ConfigType.THEME);
-            String appName = "Sismics Docs";
+            String appName = "MedProve Docs";
             if (themeConfig != null) {
                 try (JsonReader reader = Json.createReader(new StringReader(themeConfig.getValue()))) {
                     JsonObject themeJson = reader.readObject();
-                    appName = themeJson.getString("name", "Sismics Docs");
+                    appName = themeJson.getString("name", "MedProve Docs");
                 }
             }
 
@@ -144,6 +144,9 @@ public class EmailUtil {
 
             // Add automatic parameters
             String baseUrl = System.getenv(Constants.BASE_URL_ENV);
+            if (baseUrl == null) {
+                baseUrl = ConfigUtil.getConfigBundle().getString("docs_base_url");
+            }
             if (Strings.isNullOrEmpty(baseUrl)) {
                 log.error("DOCS_BASE_URL environnement variable needs to be set for proper email links");
                 baseUrl = ""; // At least the mail will be sent...
