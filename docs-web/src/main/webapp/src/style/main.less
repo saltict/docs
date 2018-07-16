@@ -201,7 +201,8 @@ ul.tag-tree {
   }
 
   img {
-    width: 100%;
+    max-width: 100%;
+    max-height: calc(~"100vh - 100px");
   }
 }
 
@@ -754,3 +755,165 @@ input[readonly].share-link {
   padding-right: 0;
 }
 
+.dicom-viewer {
+  background-color: #000;
+  overflow:         auto;
+
+  /* Layers */
+  .layerContainer {
+    position:   relative;
+    padding:    0;
+    margin:     auto;
+    text-align: center;
+  }
+  .imageLayer {
+    position: absolute;
+    left:     0px;
+  }
+  .drawDiv {
+    position:       absolute;
+    pointer-events: none;
+  }
+
+  .inline {
+    display: inline-block !important;
+  }
+
+  /* Info */
+  .info {
+    color:       #cde;
+    text-shadow: 1px 1px #000;
+    font-size:   80%;
+  }
+  .infoc {
+    color:       #ff0;
+    text-shadow: 1px 1px #000;
+    font-size:   120%;
+  }
+  .infotl {
+    position:   absolute;
+    top:        0;
+    left:       0;
+    text-align: left;
+  }
+  .infotc {
+    position:   absolute;
+    top:        0;
+    left:       50%;
+    right:      50%;
+    text-align: center;
+  }
+  .infotr {
+    position:   absolute;
+    top:        0;
+    right:      0;
+    text-align: right;
+  }
+  .infocl {
+    position:   absolute;
+    bottom:     50%;
+    left:       0;
+    text-align: left;
+  }
+  .infocr {
+    position:   absolute;
+    bottom:     50%;
+    right:      2px;
+    text-align: right;
+  }
+  .infobl {
+    position:   absolute;
+    bottom:     0;
+    left:       0;
+    text-align: left;
+  }
+  .infobc {
+    position:   absolute;
+    bottom:     0;
+    left:       50%;
+    right:      50%;
+    text-align: center;
+  }
+  .infobr {
+    position:   absolute;
+    bottom:     0;
+    right:      0;
+    text-align: right;
+  }
+
+  .plot {
+    position: absolute;
+    width:    100px;
+    height:   50px;
+    bottom:   15px;
+    right:    0;
+  }
+  .infoLayer ul {
+    margin:          0;
+    padding:         2px;
+    list-style-type: none;
+  }
+  .infoLayer li {
+    margin-top: 0;
+  }
+  .infoLayer canvas {
+    margin:  0;
+    padding: 2px;
+  }
+
+  /* Tag list */
+  table.tagsTable {
+    border-collapse: collapse;
+  }
+  table.tagsTable thead th {
+    text-transform: uppercase;
+    font-weight:    bold;
+    opacity:        0.5;
+  }
+  table.drawsTable {
+    border-collapse: collapse;
+  }
+  table.drawsTable td {
+    vertical-align: middle;
+  }
+  table.drawsTable thead th {
+    text-transform: uppercase;
+    font-weight:    bold;
+    opacity:        0.5;
+  }
+  .highlighted {
+    background: #f87217;
+  }
+  .tags form {
+    width: 50%;
+  }
+
+  .toolList ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+
+    button, select{
+      margin-top: 0.5em;
+      padding: 3px 15px;
+      border: 1px solid #ddd;
+      height: 30px;
+    }
+
+    .colourSelect {
+      height: 30px;
+      margin-top: 0.5em;
+      background-color: #fff;
+      border: 1px solid #ddd;
+    }
+  }
+}
+
+.file-thumbnail .dicom-viewer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}

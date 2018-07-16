@@ -13,9 +13,22 @@ angular.module('docs').controller('FileModalView', function ($uibModalInstance, 
       if (value.id === $stateParams.fileId) {
         $scope.file = value;
         $scope.trustedFileUrl = $sce.trustAsResourceUrl('../api/file/' + $stateParams.fileId + '/data');
+        selectFileViewer(value);
       }
     });
   });
+
+  function selectFileViewer(file){
+    if(file.name.match(/\.dcm$/)) {
+      $scope.fileViewer =  'DicomViewer';
+    } else if(file.mimetype.substring(0, 6) === 'video/') {
+      $scope.fileViewer =  'VideoViewer';
+    } else if(file.mimetype === 'application/pdf') {
+      $scope.fileViewer =  'PdfViewer';
+    } else {
+      $scope.fileViewer =  'ImageViewer';
+    }
+  }
 
   /**
    * Return the next file.
@@ -107,10 +120,4 @@ angular.module('docs').controller('FileModalView', function ($uibModalInstance, 
     off();
   });
 
-  /**
-   * Return true if we can display the preview image.
-   */
-  $scope.canDisplayPreview = function () {
-    return $scope.file && $scope.file.mimetype !== 'application/pdf';
-  };
 });

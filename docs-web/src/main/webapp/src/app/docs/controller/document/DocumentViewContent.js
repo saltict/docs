@@ -28,17 +28,28 @@ angular.module('docs').controller('DocumentViewContent', function ($scope, $root
    */
   $scope.loadFiles = function () {
     Restangular.one('file/list').get({ id: $stateParams.id }).then(function (data) {
+      data.files.forEach(function(file) {
+        file.fileViewer = selectFileViewer(file);
+      });
       $scope.files = data.files;
       // TODO Keep currently uploading files
     });
   };
   $scope.loadFiles();
 
+  function selectFileViewer(file){
+    if(file.name.match(/\.dcm$/)) {
+      return 'DicomViewer';
+    }  else {
+      return 'ImageViewer';
+    }
+  }
+
   /**
    * Navigate to the selected file.
    */
   $scope.openFile = function (file) {
-    $state.go('document.view.content.file', { id: $stateParams.id, fileId: file.id })
+      $state.go('document.view.content.file', { id: $stateParams.id, fileId: file.id })
   };
 
   /**

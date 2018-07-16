@@ -49,8 +49,10 @@
           <span class="fas fa-spin fa-circle-notch"></span>
         </div>
         <a class="file-thumbnail" ng-click="openFile(file)" title="{{ file.mimetype }} | {{ file.size | filesize }}">
-          <img ng-src="../api/file/{{ file.id }}/data?size=thumb" tooltip-placement="top" />
+          <img ng-src="../api/file/{{ file.id }}/data?size=thumb" tooltip-placement="top" ng-if="file.fileViewer == 'ImageViewer'"/>
+          <dicom-thumbnail data-file="file" ng-if="file.fileViewer == 'DicomViewer'"></dicom-thumbnail>
         </a>
+
 
         <div class="file-info">
           <div class="v-align caption caption-hover-inverse file-name" ng-click="openFile(file)" ng-if="file.name">{{ file.name }}</div>

@@ -32,14 +32,16 @@
 </div>
 
 <div class="text-center" style="position: relative;" ng-if="$stateParams.fileId">
+  <dicom-viewer ng-if="!error && fileViewer == 'DicomViewer'" data-file="file" ></dicom-viewer>
+
   <!-- Standard preview -->
   <img ng-src="../api/file/{{ $stateParams.fileId }}/data?size=web"
        ng-init="error = false"
        img-error="error = true"
-       ng-show="!error && canDisplayPreview()" />
+       ng-show="!error && fileViewer == 'ImageViewer'"/>
 
   <!-- Video player -->
-  <a href class="video-overlay" ng-if="!error && file.mimetype.substring(0, 6) == 'video/'"
+  <a href class="video-overlay" ng-if="!error && fileViewer == 'VideoViewer'"
      ng-init="videoPlayer = false" ng-click="videoPlayer = true">
     <span class="fas fa-play-circle" ng-if="!videoPlayer"></span>
     <video ng-if="videoPlayer" autoplay="autoplay" loop="loop"
@@ -47,7 +49,7 @@
   </a>
 
   <!-- PDF viewer -->
-  <iframe ng-src="{{ trustedFileUrl }}" class="pdf-viewer" scrolling="yes" ng-if="!error && file.mimetype == 'application/pdf'"></iframe>
+  <iframe ng-src="{{ trustedFileUrl }}" class="pdf-viewer" scrolling="yes" ng-if="!error && fileViewer == 'PdfViewer'"></iframe>
 
   <!-- File not found -->
   <p class="well-lg" ng-show="error">

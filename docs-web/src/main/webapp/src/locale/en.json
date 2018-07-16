@@ -480,6 +480,10 @@
       "current": "Today",
       "clear": "Clear",
       "close": "Done"
+    },
+    "dicomviewer": {
+      "dicomviewer": "Dicom Viewer",
+      "toogleInfo": "Toggle Info"
     }
   },
   "filter": {
