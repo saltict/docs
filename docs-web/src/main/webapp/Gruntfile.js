@@ -25,7 +25,7 @@ module.exports = function(grunt) {
         options: {
           separator: ';'
         },
-        src: ['src/lib/jquery.js','src/lib/jquery.ui.js','src/lib/underscore.js','src/lib/colorpicker.js', 'src/lib/pell.js', 'src/lib/angular.js', 'src/lib/angular.*.js',
+        src: ['src/lib/jquery.js','src/lib/jquery.ui.js','src/lib/underscore.js','src/lib/colorpicker.js', 'src/lib/pell.js', 'src/lib/angular.js', 'src/lib/angular.*.js','src/lib/dwv/helper/*.js', 'src/lib/dwv/*.js',
           'dist/app/docs/app.js', 'dist/app/docs/controller/**/*.js', 'dist/app/docs/directive/*.js', 'dist/app/docs/filter/*.js', 'dist/app/docs/service/*.js'],
         dest: 'dist/docs.js'
       },
@@ -107,6 +107,12 @@ module.exports = function(grunt) {
         expand: true,
         cwd: 'src/',
         src: ['**', '!**/*.js', '!*.html', '!**/*.less', '!**/*.css', 'locale/**'],
+        dest: 'dist/'
+      },
+      static: {
+        expand: true,
+        cwd: 'src/',
+        src: ['static/**/*.*'],
         dest: 'dist/'
       }
     },

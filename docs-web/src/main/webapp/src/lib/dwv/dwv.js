@@ -1333,10 +1333,10 @@ dwv.App = function ()
     {
         // alert window
         if ( error.name && error.message) {
-            alert(error.name+": "+error.message);
+            console.error(error.name+": "+error.message);
         }
         else {
-            alert("Error: "+error+".");
+            console.error("Error: "+error+".");
         }
         // log
         if ( error.stack ) {
@@ -12324,20 +12324,20 @@ dwv.html.Layer = function(canvas)
         //canvas = document.getElementById(name);
         //if (!canvas)
         //{
-        //    alert("Error: cannot find the canvas element for '" + name + "'.");
+        //    console.error("Error: cannot find the canvas element for '" + name + "'.");
         //    return;
         //}
         // check that the getContext method exists
         if (!canvas.getContext)
         {
-            alert("Error: no canvas.getContext method.");
+            console.error("Error: no canvas.getContext method.");
             return;
         }
         // get the 2D context
         context = canvas.getContext('2d');
         if (!context)
         {
-            alert("Error: failed to get the 2D context.");
+            console.error("Error: failed to get the 2D context.");
             return;
         }
         // canvas sizes
@@ -25154,19 +25154,19 @@ dwv.browser.check = function()
     // Check for the File API support
     if( !dwv.browser.hasFileApi() ) {
         message = "The File APIs are not supported in this browser. ";
-        alert(message+appnorun);
+        console.error(message+appnorun);
         throw new Error(message);
     }
     // Check for XMLHttpRequest
     if( !dwv.browser.hasXmlHttpRequest() ) {
         message = "The XMLHttpRequest is not supported in this browser. ";
-        alert(message+appnorun);
+        console.error(message+appnorun);
         throw new Error(message);
     }
     // Check typed array
     if( !dwv.browser.hasTypedArray() ) {
         message = "The Typed arrays are not supported in this browser. ";
-        alert(message+appnorun);
+        console.error(message+appnorun);
         throw new Error(message);
     }
 

@@ -20,7 +20,7 @@ dwv.i18nOnInitialised(function() {
     });
 });
 
-dwv.i18nInitialise("auto", "lib/dwv");
+dwv.i18nInitialise("auto", "static/dwv");
 
 //====================================
 // Setup Tools
@@ -89,9 +89,9 @@ dwv.gui.Undo = dwv.gui.base.Undo;
 
 // Image Decoder
 dwv.image.decoderScripts = {
-  "jpeg2000"     : "lib/dwv/decoders/pdfjs/decode-jpeg2000.js",
-  "jpeg-lossless": "lib/dwv/decoders/rii-mango/decode-jpegloss.js",
-  "jpeg-baseline": "lib/dwv/decoders/pdfjs/decode-jpegbaseline.js"
+  "jpeg2000"     : "static/dwv/decoders/pdfjs/decode-jpeg2000.js",
+  "jpeg-lossless": "static/dwv/decoders/rii-mango/decode-jpegloss.js",
+  "jpeg-baseline": "static/dwv/decoders/pdfjs/decode-jpegbaseline.js"
 };
 
 dwv.finishConfig = true;
@@ -112,7 +112,7 @@ angular.module('docs').directive('dicomViewer', function() {
     controller: function($scope, $timeout) {
       $scope.dicomId = dwv.dicomIdCounter++;
       dwv.gui.getWindowSize = function() {
-        return {'width': ($(window).width()), 'height': ($(window).height() - 120)};
+        return {'width': ($(window).width()), 'height': ($(window).height() - 135)};
       };
 
       $timeout(function() {
@@ -127,9 +127,13 @@ angular.module('docs').directive('dicomViewer', function() {
           "shapes"        : ["Ruler", "Protractor", "Rectangle"]
         };
 
-        $scope.dicomViewer = new dwv.App();
-        $scope.dicomViewer.init(options);
-        $scope.dicomViewer.loadURLs(["../api/file/" + $scope.file.id + "/data"]);
+        var dicomViewer = new dwv.App();
+        dicomViewer.init(options);
+        dicomViewer.loadURLs(["../api/file/" + $scope.file.id + "/data"]);
+
+        $scope.$on('$destroy', function(e) {
+          dicomViewer.abortLoad();
+        });
 
         $scope.toggleInfo = function() {
           $scope.dicomViewer.toggleInfoLayerDisplay();
@@ -166,9 +170,13 @@ angular.module('docs').directive('dicomThumbnail', function() {
           "fitToWindow"   : true
         };
 
-        $scope.dicomViewer = new dwv.App();
-        $scope.dicomViewer.init(options);
-        $scope.dicomViewer.loadURLs(["../api/file/" + $scope.file.id + "/data"]);
+        var dicomViewer = new dwv.App();
+        dicomViewer.init(options);
+        dicomViewer.loadURLs(["../api/file/" + $scope.file.id + "/data"]);
+
+        $scope.$on('$destroy', function(e) {
+          dicomViewer.abortLoad();
+        })
       })
     },
     link: function(scope, element, attr, ctrl) {
