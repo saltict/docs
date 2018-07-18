@@ -1,0 +1,21 @@
+<div class="text-left zip-viewer">
+
+  <div class="well well-3d clearfix">
+    <h3 class="well-3d-header text-muted pull-left">{{'directive.zipviewer.fileTable' | translate}}</h3>
+    <div class="pull-right" ng-if="canOpenWithDicomViewer">
+      <button class="btn btn-primary" ng-click="openInDicomViewer()">{{ 'directive.dicomviewer.openWithDicomViewer' | translate }}</button>
+    </div>
+    <table class="table file-table">
+      <tr>
+        <th>{{'directive.zipviewer.fileName' | translate}}</th>
+        <th>{{'directive.zipviewer.fileSize' | translate}}</th>
+        <th>{{'directive.zipviewer.lastModified' | translate}}</th>
+      </tr>
+      <tr ng-repeat="file in fileList" ng-hide="file.dir">
+        <td>{{file.name}}</td>
+        <td>{{getKb(file._data.uncompressedSize)}}</td>
+        <td>{{file.date | date : $root.dateTimeFormat}}</td>
+      </tr>
+    </table>
+  </div>
+</div>

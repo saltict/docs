@@ -19,6 +19,8 @@
   <div class="file-viewer-content">
     <dicom-viewer ng-if="!error && fileViewer == 'DicomViewer'" data-file="file" ></dicom-viewer>
 
+    <zip-viewer ng-if="!error && fileViewer == 'ZipViewer'" data-file="file" ></zip-viewer>
+
     <!-- Standard preview -->
     <img ng-src="../api/file/{{ $stateParams.fileId }}/data?size=web"
          ng-init="error = false"

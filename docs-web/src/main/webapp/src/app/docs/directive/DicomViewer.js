@@ -74,6 +74,9 @@ dwv.gui.Toolbox = dwv.gui.base.Toolbox;
 // ZoomAndPan
 dwv.gui.ZoomAndPan = dwv.gui.base.ZoomAndPan;
 
+// Scroll
+dwv.gui.Scroll = dwv.gui.base.Scroll;
+
 // DrawList
 dwv.gui.DrawList = dwv.gui.base.DrawList;
 
@@ -109,7 +112,7 @@ angular.module('docs').directive('dicomViewer', function() {
     scope: {
       file: '='
     },
-    controller: function($scope, $timeout) {
+    controller: function($scope, $timeout, $translate) {
       $scope.dicomId = dwv.dicomIdCounter++;
       dwv.gui.getWindowSize = function() {
         return {'width': ($(window).width()), 'height': ($(window).height() - 135)};
@@ -123,13 +126,20 @@ angular.module('docs').directive('dicomViewer', function() {
           "containerDivId": dicomContainerId ,
           "fitToWindow"   : true,
           "gui"           : ["tool", "undo"],
-          "tools"         : ["ZoomAndPan", "Draw"],
+          "loader"        : ["Url"],
+          "tools"         : ["Scroll","ZoomAndPan", "Draw"],
           "shapes"        : ["Ruler", "Protractor", "Rectangle"]
         };
 
         var dicomViewer = new dwv.App();
         dicomViewer.init(options);
-        dicomViewer.loadURLs(["../api/file/" + $scope.file.id + "/data"]);
+
+        var fileUrl = "../api/file/" + $scope.file.id + "/data";
+        if($scope.file.mimetype === 'application/zip') {
+          fileUrl += '?type=.zip'
+        }
+        dicomViewer.loadURLs([fileUrl]);
+        dicomViewer.getElement('scrollLi').textContent = $translate.instant('directive.dicomviewer.scrollHelpText');
 
         $scope.$on('$destroy', function(e) {
           dicomViewer.abortLoad();
@@ -146,6 +156,9 @@ angular.module('docs').directive('dicomViewer', function() {
   }
 });
 
+/**
+ * Simple dicom loader for thumb
+ */
 angular.module('docs').directive('dicomThumbnail', function() {
   return {
     restrict: 'E',

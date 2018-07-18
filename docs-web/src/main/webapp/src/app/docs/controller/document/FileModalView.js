@@ -4,6 +4,8 @@
  * File modal view controller.
  */
 angular.module('docs').controller('FileModalView', function ($uibModalInstance, $scope, $state, $stateParams, $sce, Restangular, $transitions) {
+  $scope.fileViewer =  'ImageViewer';
+
   // Load files
   Restangular.one('file/list').get({ id: $stateParams.id }).then(function (data) {
     $scope.files = data.files;
@@ -21,6 +23,8 @@ angular.module('docs').controller('FileModalView', function ($uibModalInstance, 
   function selectFileViewer(file){
     if(file.name.match(/\.dcm$/)) {
       $scope.fileViewer =  'DicomViewer';
+    } else if(file.mimetype === 'application/zip') {
+      $scope.fileViewer =  'ZipViewer';
     } else if(file.mimetype.substring(0, 6) === 'video/') {
       $scope.fileViewer =  'VideoViewer';
     } else if(file.mimetype === 'application/pdf') {
@@ -106,6 +110,14 @@ angular.module('docs').controller('FileModalView', function ($uibModalInstance, 
    */
   $scope.closeFile = function () {
     $uibModalInstance.dismiss();
+  };
+
+  /**
+   * Change viewwer
+   * @param {String} viewer
+   */
+  $scope.changeViewer = function(viewer) {
+    $scope.fileViewer = viewer;
   };
 
   // Close the modal when the user exits this state

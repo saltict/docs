@@ -483,7 +483,15 @@
     },
     "dicomviewer": {
       "dicomviewer": "Dicom Viewer",
-      "toogleInfo": "Toggle Info"
+      "toogleInfo": "Toggle Info",
+      "openWithDicomViewer": "Open With Dicom Viewer",
+      "scrollHelpText": "Opening set of dicom files! Use mouse scroll to show another file in set"
+    },
+    "zipviewer": {
+      "fileTable": "Files List",
+      "fileName": "File Name",
+      "fileSize": "File Size",
+      "lastModified": "Last Modified"
     }
   },
   "filter": {
