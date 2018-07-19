@@ -126,7 +126,11 @@
         "full_name": "<strong>{{ name }}</strong> started on {{ create_date | date }}",
         "cancel_workflow": "Cancel the current workflow",
         "cancel_workflow_title": "Cancel the workflow",
-        "cancel_workflow_message": "Do you really want to cancel the current workflow?"
+        "cancel_workflow_message": "Do you really want to cancel the current workflow?",
+        "type": "Type",
+        "name": "Name",
+        "for": "For",
+        "validation": "Validation"
       },
       "permissions": {
         "permissions": "Permissions",
@@ -308,7 +312,15 @@
         "target_help": "<strong>Approve:</strong> Accept or reject the review<br/><strong>Validate:</strong> Review and continue the workflow",
         "add_step": "Add a workflow step",
         "actions": "What happens after?",
-        "remove_action": "Remove action"
+        "remove_action": "Remove action",
+        "comment_type": "Comment Type",
+        "comment_type_text": "Text",
+        "comment_type_select": "Select",
+        "comment_type_checkbox": "Checkbox",
+        "comment_type_radio": "Radio",
+        "comment_options": "Comment Options",
+        "add_comment_options": "Add Comment Options",
+        "remove_last_comment_option": "Remove Last Comment Option"
       }
     },
     "security": {

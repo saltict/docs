@@ -94,7 +94,6 @@ angular.module('docs').controller('SettingsWorkflowEdit', function($scope, $dial
     });
     workflow.steps = JSON.stringify(workflow.steps);
 
-
     if ($scope.isEdit()) {
       promise = Restangular
         .one('routemodel', $stateParams.id)
@@ -188,4 +187,28 @@ angular.module('docs').controller('SettingsWorkflowEdit', function($scope, $dial
   Restangular.one('tag/list').get().then(function(data) {
     $scope.tags = data.tags;
   });
+
+
+  var optionText = $translate.instant('options') + ' ';
+  $scope.updateCommentType = function(commentConfig) {
+    if(commentConfig.type === 'text') {
+      delete(commentConfig.options)
+    } else if(typeof commentConfig.options !== 'object') {
+      console.log(typeof commentConfig.options);
+      commentConfig.options = [ optionText + '1']
+    }
+  };
+
+  $scope.addCommentOption = function(commentConfig) {
+    if(typeof commentConfig.options === 'object') {
+      var number = commentConfig.options.length + 1;
+      commentConfig.options.push(optionText + number);
+    }
+  };
+
+  $scope.removeLastCommentOption = function(commentConfig) {
+    if(typeof commentConfig.options === 'object') {
+      commentConfig.options.pop();
+    }
+  };
 });

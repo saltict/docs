@@ -7,6 +7,10 @@ angular.module('docs').controller('DocumentView', function ($scope, $state, $sta
   // Load document data from server
   Restangular.one('document', $stateParams.id).get().then(function (data) {
     $scope.document = data;
+    var routeStep = $scope.document.route_step;
+    if(routeStep && routeStep.comment_config) {
+      routeStep.comment_config = JSON.parse(routeStep.comment_config);
+    }
   }, function (response) {
     $scope.error = response;
   });
@@ -157,4 +161,12 @@ angular.module('docs').controller('DocumentView', function ($scope, $state, $sta
       $state.go('document.view.workflow', {}, {reload: true});
     });
   };
+
+  /**
+   * Update Workflow Comment
+   * @param {String} comment
+   */
+  $scope.updateWorkflowComment = function(comment) {
+    $scope.workflowComment = comment;
+  }
 });

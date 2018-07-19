@@ -80,6 +80,27 @@
                             ng-attr-placeholder="{{ 'settings.workflow.edit.name_placeholder' | translate }}"></textarea>
                 </div>
               </div>
+              <div class="row mt-10">
+                <div class="col-xs-12" ng-class="{ 'has-error': !editWorkflowForm['comment-type-' + $index].$valid && editWorkflowForm.$dirty }">
+                  <strong>{{ 'settings.workflow.edit.comment_type' | translate }}</strong>
+                  <select class="form-control mt-10" name="comment-type-{{ $index }}" ng-model="step.commentConfig.type" ng-change="updateCommentType(step.commentConfig)">
+                    <option value="text">{{ 'settings.workflow.edit.comment_type_text' | translate }}</option>
+                    <option value="select">{{ 'settings.workflow.edit.comment_type_select' | translate }}</option>
+                    <option value="radio">{{ 'settings.workflow.edit.comment_type_radio' | translate }}</option>
+                  </select>
+                </div>
+                <div class="col-xs-12" ng-if="step.commentConfig.options">
+                  <strong>{{ 'settings.workflow.edit.comment_options' | translate }}</strong>
+                  <br>
+                  <input class="form-control mt-10 input-sm" type="text" ng-model="step.commentConfig.options[$index]" ng-repeat="option in step.commentConfig.options">
+                  <button class="btn-link pointer ng-binding" ng-click="addCommentOption(step.commentConfig)">
+                    <span class="fas fa-plus-circle"></span> {{ 'settings.workflow.edit.add_comment_options' | translate }}
+                  </button>
+                  <button class="btn-link pointer ng-binding" ng-click="removeLastCommentOption(step.commentConfig)">
+                    <span class="fas fa-minus-circle text-danger"></span> <span class="text-danger">{{ 'settings.workflow.edit.remove_last_comment_option' | translate }}</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
           <div class="row mt-10">
@@ -107,7 +128,7 @@
                       </div>
                     </div>
                     <p class="text-center">
-                      <a href ng-click="removeAction(transition.actions, action)">
+                      <a href class="text-danger" ng-click="removeAction(transition.actions, action)">
                         <span class="fas fa-minus-circle"></span> {{ 'settings.workflow.edit.remove_action' | translate }}
                       </a>
                     </p>

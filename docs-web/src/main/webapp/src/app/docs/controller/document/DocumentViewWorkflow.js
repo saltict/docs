@@ -15,6 +15,7 @@ angular.module('docs').controller('DocumentViewWorkflow', function ($scope, $sta
     });
   };
 
+
   /**
    * Start the selected workflow
    */
@@ -23,6 +24,7 @@ angular.module('docs').controller('DocumentViewWorkflow', function ($scope, $sta
       routeModelId: $scope.routemodel,
       documentId: $stateParams.id
     }).then(function (data) {
+      data.route_step.comment_config =  JSON.parse(data.route_step.comment_config);
       $scope.document.route_step = data.route_step;
       $scope.loadRoutes();
     });

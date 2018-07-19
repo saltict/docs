@@ -109,8 +109,22 @@
             {{ 'workflow_type.' + document.route_step.type | translate }}
             <span class="label label-default"><acl data="document.route_step.target"></acl></span>
           </p>
-          <p ng-show="document.route_step.transitionable">
-            <textarea ng-model="workflowComment" rows="5" class="form-control mb-10"
+          <div ng-show="document.route_step.transitionable">
+
+            <div ng-show="document.route_step.comment_config.type == 'select'">
+              <select class="form-control mb-10" ng-model="workflowComment"
+                      ng-options="option for option in document.route_step.comment_config.options">
+                <option value="">---</option>
+              </select>
+            </div>
+
+            <div ng-show="document.route_step.comment_config.type == 'radio'">
+              <div class="radio text-left" ng-repeat="item in document.route_step.comment_config.options">
+                <label><input name="workflowCommentRadio" type="radio" ng-model="workflowComment" value="{{item}}" ng-click="updateWorkflowComment(item)">{{item}}</label>
+              </div>
+            </div>
+
+            <textarea ng-model="workflowComment" rows="5" class="form-control mb-10" ng-show="document.route_step.comment_config.type == 'text'"
                       ng-attr-placeholder="{{ 'document.view.workflow_comment' | translate }}"></textarea>
             <span class="btn btn-primary"
                   ng-show="document.route_step.type == 'VALIDATE'"
@@ -127,7 +141,7 @@
                   ng-click="validateWorkflow('REJECTED')">
               {{ 'workflow_transition.REJECTED' | translate }}
             </span>
-          </p>
+          </div>
         </div>
       </div>
 

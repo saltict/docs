@@ -95,12 +95,17 @@ public class RouteResource extends BaseResource {
                 if (step.containsKey("transitions")) {
                     transitions = step.getJsonArray("transitions").toString();
                 }
+                String commentConfig = null;
+                if (step.containsKey("commentConfig")) {
+                    commentConfig = step.getJsonObject("commentConfig").toString();
+                }
 
                 RouteStep routeStep = new RouteStep()
                         .setRouteId(route.getId())
                         .setName(step.getString("name"))
                         .setOrder(order)
                         .setType(RouteStepType.valueOf(step.getString("type")))
+                        .setCommentConfig(commentConfig)
                         .setTransitions(transitions)
                         .setTargetId(SecurityUtil.getTargetIdFromName(targetName, targetType));
 

@@ -134,7 +134,7 @@ public class RouteModelResource extends BaseResource {
             }
             for (int i = 0; i < stepsJson.size(); i++) {
                 JsonObject step = stepsJson.getJsonObject(i);
-                if (step.size() != 4) {
+                if (step.size() != 5) {
                     throw new ClientException("ValidationError", "Steps data not valid");
                 }
 

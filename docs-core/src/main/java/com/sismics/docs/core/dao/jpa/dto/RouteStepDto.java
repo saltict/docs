@@ -38,6 +38,11 @@ public class RouteStepDto {
     private String comment;
 
     /**
+     * Comment Config.
+     */
+    private String commentConfig;
+
+    /**
      * Target ID (user or group).
      */
     private String targetId;
@@ -106,6 +111,14 @@ public class RouteStepDto {
     public RouteStepDto setTransition(String transition) {
         this.transition = transition;
         return this;
+    }
+
+    public String getCommentConfig() {
+        return commentConfig;
+    }
+
+    public void setCommentConfig(String commentConfig) {
+        this.commentConfig = commentConfig;
     }
 
     public String getComment() {
@@ -189,6 +202,7 @@ public class RouteStepDto {
         return Json.createObjectBuilder()
                 .add("name", getName())
                 .add("type", getType().name())
+                .add("comment_config", JsonUtil.nullable(getCommentConfig()))
                 .add("comment", JsonUtil.nullable(getComment()))
                 .add("end_date", JsonUtil.nullable(getEndDateTimestamp()))
                 .add("validator_username", JsonUtil.nullable(getValidatorUserName()))

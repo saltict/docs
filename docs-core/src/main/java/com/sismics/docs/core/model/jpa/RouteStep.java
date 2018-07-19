@@ -49,6 +49,12 @@ public class RouteStep {
     private RouteStepTransition transition;
 
     /**
+     * Comment Config JSON data.
+     */
+    @Column(name = "RTP_COMMENT_CONFIG_C")
+    private String commentConfig;
+
+    /**
      * Comment.
      */
     @Column(name = "RTP_COMMENT_C")
@@ -141,6 +147,15 @@ public class RouteStep {
         return this;
     }
 
+    public String getCommentConfig() {
+        return commentConfig;
+    }
+
+    public RouteStep setCommentConfig(String commentConfig) {
+        this.commentConfig = commentConfig;
+        return this;
+    }
+
     public String getComment() {
         return comment;
     }
@@ -221,6 +236,7 @@ public class RouteStep {
                 .add("name", name)
                 .add("type", type)
                 .add("transition", transition)
+                .add("commentConfig", commentConfig)
                 .add("comment", comment)
                 .add("targetId", targetId)
                 .add("order", order)

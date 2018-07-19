@@ -40,10 +40,11 @@
            translate-values="{ name: route.name, create_date: route.create_date }"></caption>
   <thead>
   <tr>
-    <th>Type</th>
-    <th>Name</th>
-    <th>For</th>
-    <th>Validation</th>
+    <th>{{'document.view.workflow.type' | translate}}</th>
+    <th>{{'document.view.workflow.name' | translate}}</th>
+    <th>{{'document.view.workflow.for' | translate}}</th>
+    <th>{{'document.view.workflow.validation' | translate}}</th>
+    <th>{{'document.view.comments' | translate}}</th>
   </tr>
   </thead>
   <tbody>
@@ -70,6 +71,9 @@
           <em ng-bind-html="step.comment | newline"></em>
         </div>
       </span>
+    </td>
+    <td>
+      {{step.comment}}
     </td>
   </tr>
   </tbody>
