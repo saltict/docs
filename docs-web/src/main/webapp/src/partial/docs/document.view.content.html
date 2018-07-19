@@ -41,7 +41,28 @@
      ngf-drag-over-class="'bg-success'"
      ngf-multiple="true"
      ngf-allow-dir="false">
-  <div ui-sortable="fileSortableOptions" ng-model="files">
+
+  <div class="file-list" ui-sortable="fileSortableOptions" ng-model="files" ng-if="fileListStyle != 'grid'">
+    <div class="file-item" ng-repeat="file in files">
+      <div class="caption caption-hover" ng-show="document.writable">
+        <div class="handle"><span class="fas fa-arrows-alt"></span></div>
+      </div>
+      <div class="file-name">
+        <a href class="v-align caption caption-hover-inverse file-name" ng-click="openFile(file)" ng-if="file.name" title="{{ file.mimetype }} | {{ file.size | filesize }}">{{ file.name }}</a>
+      </div>
+      <div class="file-actions">
+        <a href class="btn-link" ng-click="renameFile(file)">
+          <span class="fas fa-pencil-alt"></span>
+          {{ 'rename' | translate }}
+        </a>
+        <a href class="btn-link" ng-click="deleteFile(file)">
+          <span class="fas fa-trash"></span>
+          {{ 'delete' | translate }}
+        </a>
+      </div>
+    </div>
+  </div>
+  <div ui-sortable="fileSortableOptions" ng-model="files" ng-if="fileListStyle === 'grid'">
     <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3" ng-repeat="file in files">
       <div class="thumbnail" ng-if="file.id">
         <div class="file-processing-indicator" ng-show="file.processing"

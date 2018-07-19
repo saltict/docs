@@ -982,6 +982,53 @@ input[readonly].share-link {
       margin-left: 10px;
     }
   }
+}
 
+// Change document nav to sticky
+.document-root {
+  display: flex;
+  flex-wrap: wrap;
+}
 
+.document-nav {
+  position: sticky;
+  top: 15px;
+  max-height: calc(~"100vh - 30px");
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+// File list
+.file-list {
+    padding: 0 15px;
+}
+.file-item {
+    display: flex;
+    border-top: 1px solid #eee;
+    padding: 7px 5px;
+
+    a {
+        color: inherit;
+    }
+
+    &:first-child {
+        border-top:0;
+    }
+
+    .caption {
+        cursor: pointer;
+        padding-right: 7px;
+    }
+
+    .file-name {
+        flex-grow: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .file-actions {
+        a {
+            padding-left: 7px;
+        }
+    }
 }

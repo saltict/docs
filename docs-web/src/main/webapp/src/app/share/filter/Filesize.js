@@ -10,9 +10,9 @@ angular.module('share').filter('filesize', function() {
     }
 
     var size = parseInt(text);
-    if (size > 1000000) { // 1MB
-      return Math.round(size / 1000000) + 'MB';
+    if (size > 1048576) { // 1MB
+      return Math.round(size / 1048576) + 'MB';
     }
-    return Math.round(size / 1000) + 'kB';
+    return Math.round(size / 1024) + 'kB';
   }
 });

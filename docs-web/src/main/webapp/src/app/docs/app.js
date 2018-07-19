@@ -462,6 +462,7 @@ angular.module('docs',
   $rootScope.appName = '';
   Restangular.one('theme').get().then(function(data) {
     $rootScope.appName = data.name;
+    $rootScope.docFileListStyle = data.doc_file_list;
   });
 
   // Languages

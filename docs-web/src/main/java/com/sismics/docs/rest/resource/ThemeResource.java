@@ -85,6 +85,7 @@ public class ThemeResource extends BaseResource {
         json.add("name", themeConfig.getString("name", "MedProve Docs"));
         json.add("color", themeConfig.getString("color", "#ffffff"));
         json.add("css", themeConfig.getString("css", ""));
+        json.add("doc_file_list", themeConfig.getString("doc_file_list", "list"));
         return Response.ok().entity(json.build()).build();
     }
 
@@ -111,7 +112,8 @@ public class ThemeResource extends BaseResource {
     @POST
     public Response theme(@FormParam("color") String color,
               @FormParam("name") String name,
-              @FormParam("css") String css) {
+              @FormParam("css") String css,
+              @FormParam("doc_file_list") String docFileList) {
         if (!authenticate()) {
             throw new ForbiddenClientException();
         }
@@ -132,6 +134,11 @@ public class ThemeResource extends BaseResource {
             json.add("name", JsonValue.NULL);
         } else {
             json.add("name", name);
+        }
+        if (Strings.isNullOrEmpty(name)) {
+            json.add("doc_file_list", JsonValue.NULL);
+        } else {
+            json.add("doc_file_list", docFileList);
         }
         json.add("css", JsonUtil.nullable(css));
 

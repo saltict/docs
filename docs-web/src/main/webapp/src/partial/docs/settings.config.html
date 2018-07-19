@@ -93,11 +93,21 @@
       </p>
     </div>
   </div>
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label" for="inputName">{{ 'settings.config.doc_file_list' | translate }}</label>
+    <div class="col-sm-2">
+      <select class="form-control" ng-model="theme.doc_file_list" ng-blur="update()">
+        <option value="list">{{ 'settings.config.doc_file_list_list' | translate }}</option>
+        <option value="grid">{{ 'settings.config.doc_file_list_grid' | translate }}</option>
+      </select>
+    </div>
+  </div>
 </form>
 
 <h2 translate="settings.config.title_smtp"></h2>
 <form class="form-horizontal" name="smtpForm" novalidate>
-  <div class="form-group" ng-show="smtp.hasOwnProperty('hostname')" ng-class="{ 'has-error': !smtpForm.hostname.$valid && smtpForm.$dirty }">
+  <div class="form-group" ng-show="smtp.hasOwnProperty('hostname')" ng-class="{ 'has-error': !smtpForm.hostname.$valid &&smtpForm.$dirty }">
     <label class="col-sm-2 control-label" for="smtpHostname">{{ 'settings.config.smtp_hostname' | translate }}</label>
     <div class="col-sm-7">
       <input name="hostname" type="text" ng-disabled="!smtp.hasOwnProperty('hostname')" class="form-control" id="smtpHostname" ng-model="smtp.hostname" />

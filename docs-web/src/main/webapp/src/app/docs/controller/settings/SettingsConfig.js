@@ -34,6 +34,7 @@ angular.module('docs').controller('SettingsConfig', function($scope, $rootScope,
       var stylesheet = $('#theme-stylesheet')[0];
       stylesheet.href = stylesheet.href.replace(/\?.*|$/, '?' + new Date().getTime());
       $rootScope.appName = $scope.theme.name;
+      $rootScope.docFileListStyle = $scope.theme.doc_file_list;
     });
   };
   

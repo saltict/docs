@@ -5,6 +5,11 @@
  */
 angular.module('docs').controller('DocumentViewContent', function ($scope, $rootScope, $stateParams, Restangular, $dialog, $state, Upload, $translate, $uibModal) {
   /**
+   * File type config
+   */
+  $scope.fileListStyle = $rootScope.docFileListStyle;
+
+  /**
    * Configuration for file sorting.
    */
   $scope.fileSortableOptions = {

@@ -13,7 +13,7 @@
       </tr>
       <tr ng-repeat="file in fileList" ng-hide="file.dir">
         <td>{{file.name}}</td>
-        <td>{{getKb(file._data.uncompressedSize)}}</td>
+        <td>{{file._data.uncompressedSize | filesize}}</td>
         <td>{{file.date | date : $root.dateTimeFormat}}</td>
       </tr>
     </table>
