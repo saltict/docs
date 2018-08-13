@@ -92,7 +92,7 @@
                 <div class="col-xs-12" ng-if="step.commentConfig.options">
                   <strong>{{ 'settings.workflow.edit.comment_options' | translate }}</strong>
                   <br>
-                  <input class="form-control mt-10 input-sm" type="text" ng-model="step.commentConfig.options[$index]" ng-repeat="option in step.commentConfig.options">
+                  <input class="form-control mt-10 input-sm" type="text" ng-model="option.str" ng-repeat="option in step.commentConfig.options">
                   <button class="btn-link pointer ng-binding" ng-click="addCommentOption(step.commentConfig)">
                     <span class="fas fa-plus-circle"></span> {{ 'settings.workflow.edit.add_comment_options' | translate }}
                   </button>

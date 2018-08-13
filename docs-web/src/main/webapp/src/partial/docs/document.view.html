@@ -113,14 +113,14 @@
 
             <div ng-show="document.route_step.comment_config.type == 'select'">
               <select class="form-control mb-10" ng-model="workflowComment"
-                      ng-options="option for option in document.route_step.comment_config.options">
+                      ng-options="option.str for option in document.route_step.comment_config.options">
                 <option value="">---</option>
               </select>
             </div>
 
             <div ng-show="document.route_step.comment_config.type == 'radio'">
               <div class="radio text-left" ng-repeat="item in document.route_step.comment_config.options">
-                <label><input name="workflowCommentRadio" type="radio" ng-model="workflowComment" value="{{item}}" ng-click="updateWorkflowComment(item)">{{item}}</label>
+                <label><input name="workflowCommentRadio" type="radio" ng-model="workflowComment" value="{{item.str}}" ng-click="updateWorkflowComment(item.str)">{{item.str}}</label>
               </div>
             </div>
 

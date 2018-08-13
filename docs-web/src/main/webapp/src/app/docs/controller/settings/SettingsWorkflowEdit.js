@@ -194,15 +194,14 @@ angular.module('docs').controller('SettingsWorkflowEdit', function($scope, $dial
     if(commentConfig.type === 'text') {
       delete(commentConfig.options)
     } else if(typeof commentConfig.options !== 'object') {
-      console.log(typeof commentConfig.options);
-      commentConfig.options = [ optionText + '1']
+      commentConfig.options = [{str: optionText + '1'}]
     }
   };
 
   $scope.addCommentOption = function(commentConfig) {
     if(typeof commentConfig.options === 'object') {
       var number = commentConfig.options.length + 1;
-      commentConfig.options.push(optionText + number);
+      commentConfig.options.push({str: optionText + number});
     }
   };
 
