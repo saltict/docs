@@ -25,6 +25,7 @@ angular.module('docs').controller('Login', function(Restangular, $scope, $rootSc
     User.login($scope.user).then(function() {
       User.userInfo(true).then(function(data) {
         $rootScope.userInfo = data;
+        $rootScope.isAdmin = data.base_functions.indexOf('ADMIN') !== -1;
       });
       $state.go('document.default');
     }, function(data) {
