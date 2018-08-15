@@ -47,7 +47,7 @@
                  ng-click="datepickerOpened = true" is-open="datepickerOpened" ng-disabled="fileIsUploading" />
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group hide">
         <label class="col-sm-2 control-label" for="inputLanguage">{{ 'document.language' | translate }}</label>
         <div class="col-sm-10">
           <select class="form-control" id="inputLanguage" ng-model="document.language" ng-disabled="fileIsUploading">
@@ -71,82 +71,10 @@
           <select-tag tags="document.tags" ref="inputTags" ng-disabled="fileIsUploading"></select-tag>
         </div>
       </div>
-    </fieldset>
-
-    <fieldset ng-init="additionalMetadataCollapsed = true">
-      <legend class="pointer" ng-click="additionalMetadataCollapsed = !additionalMetadataCollapsed">
-        {{ 'document.edit.additional_metadata' | translate }}
-        <span class="pull-right fas fa-plus"></span>
-      </legend>
-      <div ng-show="!additionalMetadataCollapsed">
-        <div class="form-group" ng-class="{ 'has-error': !documentForm.subject.$valid }">
-          <label class="col-sm-2 control-label" for="inputSubject">{{ 'document.subject' | translate }}</label>
-          <div class="col-sm-10">
-            <input ng-maxlength="500" class="form-control" type="text" id="inputSubject"
-                   ng-attr-placeholder="{{ 'document.edit.subject_placeholder' | translate }}" name="subject" ng-model="document.subject" ng-disabled="fileIsUploading" />
-          </div>
-        </div>
-        <div class="form-group" ng-class="{ 'has-error': !documentForm.identifier.$valid }">
-          <label class="col-sm-2 control-label" for="inputIdentifier">{{ 'document.identifier' | translate }}</label>
-          <div class="col-sm-10">
-            <input ng-maxlength="500" class="form-control" type="text" id="inputIdentifier"
-                   ng-attr-placeholder="{{ 'document.edit.identifier_placeholder' | translate }}" name="identifier" ng-model="document.identifier" ng-disabled="fileIsUploading" />
-          </div>
-        </div>
-        <div class="form-group" ng-class="{ 'has-error': !documentForm.publisher.$valid }">
-          <label class="col-sm-2 control-label" for="inputPublisher">{{ 'document.publisher' | translate }}</label>
-          <div class="col-sm-10">
-            <input ng-maxlength="500" class="form-control" type="text" id="inputPublisher"
-                   ng-attr-placeholder="{{ 'document.edit.publisher_placeholder' | translate }}" name="publisher" ng-model="document.publisher" ng-disabled="fileIsUploading" />
-          </div>
-        </div>
-        <div class="form-group" ng-class="{ 'has-error': !documentForm.format.$valid }">
-          <label class="col-sm-2 control-label" for="inputFormat">{{ 'document.format' | translate }}</label>
-          <div class="col-sm-10">
-            <input ng-maxlength="500" class="form-control" type="text" id="inputFormat"
-                   ng-attr-placeholder="{{ 'document.edit.format_placeholder' | translate }}" name="format" ng-model="document.format" ng-disabled="fileIsUploading" />
-          </div>
-        </div>
-        <div class="form-group" ng-class="{ 'has-error': !documentForm.source.$valid }">
-          <label class="col-sm-2 control-label" for="inputSource">{{ 'document.source' | translate }}</label>
-          <div class="col-sm-10">
-            <input ng-maxlength="500" class="form-control" type="text" id="inputSource"
-                   ng-attr-placeholder="{{ 'document.edit.source_placeholder' | translate }}" name="source" ng-model="document.source" ng-disabled="fileIsUploading" />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="col-sm-2 control-label" for="inputType">{{ 'document.type' | translate }}</label>
-          <div class="col-sm-10">
-            <select class="form-control" id="inputType" name="type" ng-model="document.type" ng-disabled="fileIsUploading">
-              <option value=""></option>
-              <option ng-repeat="vocabulary in vocabularies['type']">{{ vocabulary.value }}</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-2 control-label" for="inputCoverage">{{ 'document.coverage' | translate }}</label>
-          <div class="col-sm-10">
-            <select class="form-control" id="inputCoverage" name="coverage" ng-model="document.coverage" ng-disabled="fileIsUploading">
-              <option value=""></option>
-              <option ng-repeat="vocabulary in vocabularies['coverage']">{{ vocabulary.value }}</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-2 control-label" for="inputRights">{{ 'document.rights' | translate }}</label>
-          <div class="col-sm-10">
-            <select class="form-control" id="inputRights" name="rights" ng-model="document.rights" ng-disabled="fileIsUploading">
-              <option value=""></option>
-              <option ng-repeat="vocabulary in vocabularies['rights']">{{ vocabulary.value }}</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="col-sm-2 control-label" for="inputRelations">{{ 'document.relations' | translate }}</label>
-          <div class="col-sm-10">
-            <select-relation relations="document.relations" ref="inputRelations" ng-disabled="fileIsUploading"></select-relation>
-          </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="inputRelations">{{ 'document.relations' | translate }}</label>
+        <div class="col-sm-10">
+          <select-relation relations="document.relations" ref="inputRelations" ng-disabled="fileIsUploading"></select-relation>
         </div>
       </div>
     </fieldset>
