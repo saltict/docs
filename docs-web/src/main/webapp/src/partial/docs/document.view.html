@@ -49,18 +49,6 @@
       {{ 'document.view.by_creator' | translate }} <a href="#/user/{{ document.creator }}">{{ document.creator }}</a></small>
     </h1>
 
-	  <p ng-show="document.writable">
-	    <button class="btn btn-sm btn-info" ng-click="share()">
-        <span class="fas fa-share"></span> {{ 'share' | translate }}
-      </button>
-
-      <span ng-repeat="share in document.acls | filter: { 'type': 'SHARE' }">
-        <button class="btn btn-default btn-sm" ng-click="showShare(share)">
-          <span class="fas fa-check"></span> {{ share.name ? share.name : 'shared' }}
-        </button>
-      </span>
-	  </p>
-
 	  <ul class="list-inline">
 	    <li ng-repeat="tag in document.tags">
         <span class="label label-info pointer" ng-click="setSearch('tag:' + tag.name)" ng-style="{ 'background': tag.color }">{{ tag.name }}</span>
