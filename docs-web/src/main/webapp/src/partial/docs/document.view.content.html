@@ -121,7 +121,7 @@
   </p>
 </div>
 
-<p class="text-center">
+<p class="text-center" ng-show="document.writable">
   <button class="btn btn-primary" ngf-select
     ngf-change="fileDropped($files, $event)"
     input-file-multiple="multiple"

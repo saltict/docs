@@ -4,9 +4,9 @@
     {{ 'document.view.workflow.cancel_workflow' | translate }}
   </span>
 </p>
-<p class="well-sm">{{ 'document.view.workflow.message' | translate }}</p>
+<p class="well-sm" ng-show="document.writable">{{ 'document.view.workflow.message' | translate }}</p>
 
-<form name="startWorkflowForm" class="form-horizontal" novalidate ng-show="!document.route_step">
+<form name="startWorkflowForm" class="form-horizontal" novalidate ng-show="!document.route_step && document.writable">
   <div class="form-group" ng-class="{ 'has-error': !startWorkflowForm.routemodel.$valid && startWorkflowForm.$dirty }">
     <label for="inputRouteModel" class="col-sm-3">
       {{ 'document.view.workflow.workflow_start_label' | translate }}
