@@ -52,11 +52,11 @@
         <a href class="v-align caption caption-hover-inverse file-name" ng-click="openFile(file)" ng-if="file.name" title="{{ file.mimetype }} | {{ file.size | filesize }}">{{ file.name }}</a>
       </div>
       <div class="file-actions">
-        <a href class="btn-link" ng-click="renameFile(file)">
+        <a href class="btn-link" ng-click="renameFile(file)" ng-show="document.writable">
           <span class="fas fa-pencil-alt"></span>
           {{ 'rename' | translate }}
         </a>
-        <a href class="btn-link" ng-click="deleteFile(file)">
+        <a href class="btn-link" ng-click="deleteFile(file)" ng-show="document.writable">
           <span class="fas fa-trash"></span>
           {{ 'delete' | translate }}
         </a>

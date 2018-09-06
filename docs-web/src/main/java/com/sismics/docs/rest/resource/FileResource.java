@@ -252,6 +252,11 @@ public class FileResource extends BaseResource {
         // Get the file
         File file = findFile(id, null);
 
+        AclDao aclDao = new AclDao();
+        if (!aclDao.checkPermission(file.getDocumentId(), PermType.WRITE, getTargetIdList(null))) {
+            throw new ForbiddenClientException();
+        }
+
         // Validate input data
         name = ValidationUtil.validateLength(name, "name", 1, 200, false);
 
@@ -415,6 +420,11 @@ public class FileResource extends BaseResource {
 
         // Get the file
         File file = findFile(id, null);
+
+        AclDao aclDao = new AclDao();
+        if (!aclDao.checkPermission(file.getDocumentId(), PermType.WRITE, getTargetIdList(null))) {
+            throw new ForbiddenClientException();
+        }
 
         // Delete the file
         FileDao fileDao = new FileDao();
