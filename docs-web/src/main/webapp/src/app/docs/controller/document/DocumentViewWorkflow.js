@@ -3,7 +3,7 @@
 /**
  * Document view workflow controller.
  */
-angular.module('docs').controller('DocumentViewWorkflow', function ($scope, $stateParams, Restangular, $translate, $dialog) {
+angular.module('docs').controller('DocumentViewWorkflow', function ($scope, $stateParams, Restangular, $translate, $dialog, $rootScope) {
   /**
    * Load routes.
    */
@@ -51,6 +51,35 @@ angular.module('docs').controller('DocumentViewWorkflow', function ($scope, $sta
         });
       }
     });
+  };
+
+  /**
+   * Detect current user can view workflow or not
+   * @param commentConfig
+   */
+  $scope.canViewComment = function(step) {
+    var commentConfig = step.comment_config;
+    var userInfo = $rootScope.userInfo;
+    var username = userInfo.username;
+    var groups = userInfo.groups;
+
+    if(username === step.validator_username) {
+      return true;
+    }
+
+    if(commentConfig) {
+      var commentConfig = JSON.parse(commentConfig);
+      var blindWith = commentConfig.blindWith || [];
+
+      for(var i = 0; i < blindWith.length; i++ ) {
+        var blindItem = blindWith[i];
+        if(('USER' == blindItem.type && username == blindItem.name) || ('GROUP' == blindItem.type && groups.indexOf(blindItem[name]) > -1)) {
+          return false;
+        }
+      }
+    }
+
+    return true;
   };
 
   // Load route models

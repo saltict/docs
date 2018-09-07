@@ -73,7 +73,12 @@
       </span>
     </td>
     <td>
-      {{step.comment}}
+      <span ng-if="canViewComment(step)">
+        {{step.comment}}
+      </span>
+      <span class="text-muted" ng-if="!canViewComment(step)">
+        <i>{{'document.view.workflow.can_not_view_comment' | translate}}</i>
+      </span>
     </td>
   </tr>
   </tbody>

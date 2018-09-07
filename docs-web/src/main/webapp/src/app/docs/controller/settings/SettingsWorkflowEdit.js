@@ -161,6 +161,9 @@ angular.module('docs').controller('SettingsWorkflowEdit', function($scope, $dial
         actionType: 'ADD_TAG'
       }];
     }
+    if(!step.commentConfig) {
+      step.commentConfig = {};
+    }
   };
 
   /**
@@ -210,4 +213,33 @@ angular.module('docs').controller('SettingsWorkflowEdit', function($scope, $dial
       commentConfig.options.pop();
     }
   };
+
+  function aclEquals(a,b) {
+    return a.name == b.name && a.type == b.type;
+  }
+
+  $scope.addBlindWith = function(commentConfig, $item){
+    if(!(commentConfig.blindWith)) {
+      commentConfig.blindWith = [];
+    }
+
+    var existed = false;
+    for(var i = 0; i < commentConfig.blindWith.length; i++) {
+      if(aclEquals(commentConfig.blindWith[i], $item)) {
+        existed = true;
+        break;
+      }
+    }
+    if(!existed) {
+      commentConfig.blindWith.push($item);
+    }
+  };
+
+  $scope.removeBlindWith = function(commentConfig, acl) {
+    for(var i =0; i < commentConfig.blindWith.length; i++) {
+      if(aclEquals(commentConfig.blindWith[i], acl)) {
+        commentConfig.blindWith.splice(i, 1);
+      }
+    }
+  }
 });

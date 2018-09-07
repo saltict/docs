@@ -130,7 +130,8 @@
         "type": "Type",
         "name": "Name",
         "for": "For",
-        "validation": "Validation"
+        "validation": "Validation",
+        "can_not_view_comment": "This comment is hidden with you"
       },
       "permissions": {
         "permissions": "Permissions",
@@ -320,7 +321,12 @@
         "comment_type_radio": "Radio",
         "comment_options": "Comment Options",
         "add_comment_options": "Add Comment Options",
-        "remove_last_comment_option": "Remove Last Comment Option"
+        "remove_last_comment_option": "Remove Last Comment Option",
+        "blinding_comment_with" : "Blinding comment with",
+        "allow_edit_comment" : "Allow edit comment",
+        "not_allow" : "Not Allow",
+        "allow_edit_workflow_incomplete" : "When workflow is incomplete",
+        "allow_edit" : "Alow"
       }
     },
     "security": {
