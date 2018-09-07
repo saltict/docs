@@ -12,6 +12,13 @@ angular.module('docs').controller('DocumentViewWorkflow', function ($scope, $sta
       documentId: $stateParams.id
     }).then(function(data) {
       $scope.routes = data.routes;
+      $scope.routes.forEach(function(route) {
+        if(route.steps) {
+          route.steps.forEach(function(step) {
+            step.comment_config = JSON.parse(step.comment_config);
+          })
+        }
+      })
     });
   };
 
@@ -68,7 +75,6 @@ angular.module('docs').controller('DocumentViewWorkflow', function ($scope, $sta
     }
 
     if(commentConfig) {
-      var commentConfig = JSON.parse(commentConfig);
       var blindWith = commentConfig.blindWith || [];
 
       for(var i = 0; i < blindWith.length; i++ ) {
@@ -80,6 +86,55 @@ angular.module('docs').controller('DocumentViewWorkflow', function ($scope, $sta
     }
 
     return true;
+  };
+
+  $scope.canEditComment = function(step, route) {
+    var userInfo = $rootScope.userInfo;
+    var username = userInfo.username;
+    var canedit = username === step.validator_username;
+
+    if(!canedit) {
+      return canedit;
+    }
+
+    if(step.comment_config.allowEdit == 'not_alow'){
+      return false;
+    } else if(step.comment_config.allowEdit == 'incomplete') {
+      var allfill = true;
+      route.steps.forEach(function(istep) {
+          allfill = !!istep.transition;
+      });
+      if(allfill) {
+        return false;
+      }
+    }
+
+    return !step.editingComment;
+  };
+
+  $scope.editComment = function(step) {
+    step.comment_old = step.comment;
+    step.transition_old = step.transition;
+    step.transition = '';
+    step.editingComment = true;
+  };
+
+  $scope.cancelEditComment = function(step) {
+    step.editingComment = false;
+    step.comment = step.comment_old;
+    step.transition = step.transition_old;
+  };
+
+  $scope.updateWorkflowStep = function(step, type){
+    Restangular.one('route').post('updatestep', {
+      documentId: $stateParams.id,
+      routeStepId: step.id,
+      transition: type,
+      comment: step.comment
+    }).then(function (data) {
+      $scope.loadRoutes();
+    });
+    step.editingComment = false;
   };
 
   // Load route models

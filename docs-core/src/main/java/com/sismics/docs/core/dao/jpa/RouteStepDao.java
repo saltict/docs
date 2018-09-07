@@ -57,6 +57,22 @@ public class RouteStepDao {
         return routeStepDtoList.get(0);
     }
 
+
+    /**
+     * Get the current route step from a route step ID.
+     *
+     * @param routeStepId Document ID
+     * @return Current route step
+     */
+    public RouteStepDto findByRouteStepId(String routeStepId) {
+        RouteStepCriteria criteria = new RouteStepCriteria().setRouteStepId(routeStepId);
+        List<RouteStepDto> routeStepDtoList = findByCriteria(criteria, new SortCriteria(6, true));
+        if (routeStepDtoList.isEmpty()) {
+            return null;
+        }
+        return routeStepDtoList.get(0);
+    }
+
     /**
      * Returns the list of all route steps.
      *
@@ -84,6 +100,10 @@ public class RouteStepDao {
         if (criteria.getRouteId() != null) {
             criteriaList.add("rs.RTP_IDROUTE_C = :routeId");
             parameterMap.put("routeId", criteria.getRouteId());
+        }
+        if (criteria.getRouteStepId() != null) {
+            criteriaList.add("rs.RTP_ID_C = :routeStepId");
+            parameterMap.put("routeStepId", criteria.getRouteStepId());
         }
         if (criteria.getEndDateIsNull() != null) {
             criteriaList.add("RTP_ENDDATE_D is " + (criteria.getEndDateIsNull() ? "" : "not") + " null");

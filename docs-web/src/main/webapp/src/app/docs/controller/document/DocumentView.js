@@ -157,7 +157,6 @@ angular.module('docs').controller('DocumentView', function ($scope, $state, $sta
       var msg = $translate.instant('document.view.workflow_validated_message');
       var btns = [{result: 'ok', label: $translate.instant('ok'), cssClass: 'btn-primary'}];
       $dialog.messageBox(title, msg, btns);
-
       $state.go('document.view.workflow', {}, {reload: true});
     });
   };

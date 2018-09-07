@@ -10,6 +10,7 @@ import com.sismics.docs.core.dao.jpa.dto.RouteStepDto;
 import com.sismics.docs.core.model.jpa.Route;
 import com.sismics.docs.core.model.jpa.RouteModel;
 import com.sismics.docs.core.model.jpa.RouteStep;
+import com.sismics.docs.core.model.jpa.User;
 import com.sismics.docs.core.util.ActionUtil;
 import com.sismics.docs.core.util.RoutingUtil;
 import com.sismics.docs.core.util.SecurityUtil;
@@ -177,7 +178,7 @@ public class RouteResource extends BaseResource {
 
         // Validate data
         ValidationUtil.validateRequired(transitionStr, "transition");
-        comment = ValidationUtil.validateLength(comment, "comment", 1, 500, true);
+        comment = ValidationUtil.validateLength(comment, "comment", 1, 4000, true);
         RouteStepTransition routeStepTransition = RouteStepTransition.valueOf(transitionStr);
         if (routeStepDto.getType() == RouteStepType.VALIDATE && routeStepTransition != RouteStepTransition.VALIDATED
                 || routeStepDto.getType() == RouteStepType.APPROVE
@@ -218,6 +219,120 @@ public class RouteResource extends BaseResource {
             step.add("transitionable", getTargetIdList(null).contains(newRouteStep.getTargetId()));
             response.add("route_step", step);
         }
+        return Response.ok().entity(response.build()).build();
+    }
+
+
+    /**
+     * Update a step of workflow in a document
+     *
+     * @api {post} /route/updatestep Update a step in a workflow
+     * @apiName PostRouteUpdate
+     * @apiGroup Route
+     * @apiParam {String} documentId Document ID
+     * @apiParam {String} routeStepId Route Step ID
+     * @apiParam {String} transition Route step transition
+     * @apiParam {String} comment Route step comment
+     * @apiSuccess {String} status Status OK
+     * @apiError (client) ForbiddenError Access denied
+     * @apiError (client) NotFound Document or route not found
+     * @apiPermission user
+     * @apiVersion 1.5.0
+     *
+     * @return Response
+     */
+    @POST
+    @Path("updatestep")
+    public Response update(@FormParam("documentId") String documentId,
+                             @FormParam("routeStepId") String routeStepId,
+                             @FormParam("transition") String transitionStr,
+                             @FormParam("comment") String comment) {
+        if (!authenticate()) {
+            throw new ForbiddenClientException();
+        }
+
+        // Get the document
+        AclDao aclDao = new AclDao();
+        DocumentDao documentDao = new DocumentDao();
+        DocumentDto documentDto = documentDao.getDocument(documentId, PermType.READ, getTargetIdList(null));
+        if (documentDto == null) {
+            throw new NotFoundException();
+        }
+
+        // Get the current step to detect workflow done or not
+        RouteStepDao routeStepDao = new RouteStepDao();
+        RouteStepDto routeStepDto = routeStepDao.findByRouteStepId(routeStepId);
+        if (routeStepDto == null) {
+            throw new NotFoundException();
+        }
+
+        //Get allow_edit configuration
+        String allowEdit = "";
+        if(routeStepDto.getCommentConfig() != null){
+            try (JsonReader reader = Json.createReader(new StringReader(routeStepDto.getCommentConfig()))) {
+                JsonObject transitions = reader.readObject();
+                allowEdit = transitions.getString("allowEdit");
+            }
+        }
+
+        // Check condition allow edit in comment config
+        if(!"allow".equals(allowEdit)) {
+            if("incomplete".equals(allowEdit)){
+                RouteStepDto documentCurrentStep = routeStepDao.getCurrentStep(documentId);
+                if(documentCurrentStep == null || !routeStepDto.getRouteId().equals(documentCurrentStep.getRouteId())) {
+                    throw new ForbiddenClientException();
+                }
+            } else {
+                throw new ForbiddenClientException();
+            }
+        }
+
+        // Check permission to validate this step
+        if (!getTargetIdList(null).contains(routeStepDto.getTargetId())) {
+            throw new ForbiddenClientException();
+        }
+        // Only allow validator edit this comment
+        if(!principal.getName().equals(routeStepDto.getValidatorUserName())) {
+            throw new ForbiddenClientException();
+        }
+
+        // Validate data
+        ValidationUtil.validateRequired(transitionStr, "transition");
+        comment = ValidationUtil.validateLength(comment, "comment", 1, 4000, true);
+        RouteStepTransition routeStepTransition = RouteStepTransition.valueOf(transitionStr);
+        if (routeStepDto.getType() == RouteStepType.VALIDATE && routeStepTransition != RouteStepTransition.VALIDATED
+                || routeStepDto.getType() == RouteStepType.APPROVE
+                && routeStepTransition != RouteStepTransition.APPROVED && routeStepTransition != RouteStepTransition.REJECTED) {
+            throw new ClientException("ValidationError", "Invalid transition for this route step type");
+        }
+
+        // Validate the step and update ACLs
+        routeStepDao.endRouteStep(routeStepDto.getId(), routeStepTransition, comment, principal.getId());
+
+        // Execute actions
+        if (routeStepDto.getTransitions() != null) {
+            try (JsonReader reader = Json.createReader(new StringReader(routeStepDto.getTransitions()))) {
+                JsonArray transitions = reader.readArray();
+                // Filter out our transition
+                for (int i = 0; i < transitions.size(); i++) {
+                    JsonObject transition = transitions.getJsonObject(i);
+                    if (transition.getString("name").equals(routeStepTransition.name())) {
+                        // Transition found, execute those actions
+                        JsonArray actions = transition.getJsonArray("actions");
+                        for (int j = 0; j < actions.size(); j++) {
+                            JsonObject action = actions.getJsonObject(j);
+                            ActionType actionType = ActionType.valueOf(action.getString("type"));
+                            ActionUtil.executeAction(actionType, action, documentDto);
+                        }
+                    }
+                }
+            }
+        }
+
+        JsonObjectBuilder response = Json.createObjectBuilder()
+                .add("readable", aclDao.checkPermission(documentId, PermType.READ, getTargetIdList(null)));
+        RouteStepDto updatedRouteStep = routeStepDao.findByRouteStepId(routeStepId);
+        response.add("route_step", routeStepDto.toJson());
         return Response.ok().entity(response.build()).build();
     }
 

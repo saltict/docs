@@ -61,22 +61,60 @@
     <td>
       <acl data="step.target"></acl>
     </td>
-    <td>
+    <td ng-if="!step.editingComment">
       <span ng-show="step.end_date">
           {{ 'workflow_transition.' + step.transition | translate }}
           {{ step.end_date | timeAgo: dateTimeFormat }}
           by
         <a href="#/user/{{ step.validator_username }}" class="label label-default">{{ step.validator_username }}</a>
-        <div ng-show="step.comment">
-          <em ng-bind-html="step.comment | newline"></em>
-        </div>
       </span>
     </td>
-    <td>
-      <span ng-if="canViewComment(step)">
+    <td colspan="2" ng-if="step.editingComment">
+      <div ng-show="step.comment_config.type == 'select'">
+        <select class="form-control mb-10" ng-model="step.comment"
+                ng-options="option.str as option.str for option in step.comment_config.options">
+          <option value="">---</option>
+        </select>
+      </div>
+
+      <div ng-show="step.comment_config.type == 'radio'">
+        <div class="radio text-left" ng-repeat="item in step.comment_config.options">
+          <label><input name="workflowCommentRadio" type="radio" ng-model="step.comment" value="{{item.str}}" ng-click="step.comment = item.str">{{item.str}}</label>
+        </div>
+      </div>
+
+      <textarea ng-model="step.comment" rows="5" class="form-control mb-10" ng-show="step.comment_config.type == 'text'"
+                ng-attr-placeholder="{{ 'document.view.workflow_comment' | translate }}"></textarea>
+      <span class="btn btn-primary"
+            ng-show="step.type == 'VALIDATE'"
+            ng-click="updateWorkflowStep(step, 'VALIDATED')">
+              {{ 'workflow_transition.VALIDATED' | translate }}
+            </span>
+      <span class="btn btn-success"
+            ng-show="step.type == 'APPROVE'"
+            ng-click="updateWorkflowStep(step, 'APPROVED')">
+              {{ 'workflow_transition.APPROVED' | translate }}
+            </span>
+      <span class="btn btn-danger"
+            ng-show="step.type == 'APPROVE'"
+            ng-click="updateWorkflowStep(step, 'REJECTED')">
+              {{ 'workflow_transition.REJECTED' | translate }}
+            </span>
+      <span class="btn btn-default"
+            ng-click="cancelEditComment(step)">
+              {{ 'cancel' | translate }}
+            </span>
+    </td>
+    <td ng-if="canViewComment(step)">
+      <span ng-if="!step.editingComment">
         {{step.comment}}
       </span>
-      <span class="text-muted" ng-if="!canViewComment(step)">
+      <button class="btn btn-link" ng-if="canEditComment(step, route)" ng-click="editComment(step)">
+        {{'edit'|translate}}
+      </button>
+    </td>
+    <td ng-if="!canViewComment(step)">
+      <span class="text-muted">
         <i>{{'document.view.workflow.can_not_view_comment' | translate}}</i>
       </span>
     </td>

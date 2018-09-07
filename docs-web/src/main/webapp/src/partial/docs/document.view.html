@@ -101,7 +101,7 @@
 
             <div ng-show="document.route_step.comment_config.type == 'select'">
               <select class="form-control mb-10" ng-model="workflowComment"
-                      ng-options="option.str for option in document.route_step.comment_config.options">
+                      ng-options="option.str as option.str for option in document.route_step.comment_config.options">
                 <option value="">---</option>
               </select>
             </div>

@@ -200,6 +200,7 @@ public class RouteStepDto {
      */
     public JsonObjectBuilder toJson() {
         return Json.createObjectBuilder()
+                .add("id", getId())
                 .add("name", getName())
                 .add("type", getType().name())
                 .add("comment_config", JsonUtil.nullable(getCommentConfig()))

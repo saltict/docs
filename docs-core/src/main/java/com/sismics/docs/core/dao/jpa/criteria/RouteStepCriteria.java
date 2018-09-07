@@ -18,6 +18,11 @@ public class RouteStepCriteria {
     private String routeId;
 
     /**
+     * Route ID.
+     */
+    private String routeStepId;
+
+    /**
      * End date is null.
      */
     private Boolean endDateIsNull;
@@ -37,6 +42,15 @@ public class RouteStepCriteria {
 
     public RouteStepCriteria setRouteId(String routeId) {
         this.routeId = routeId;
+        return this;
+    }
+
+    public String getRouteStepId() {
+        return routeStepId;
+    }
+
+    public RouteStepCriteria setRouteStepId(String routeStepId) {
+        this.routeStepId = routeStepId;
         return this;
     }
 
