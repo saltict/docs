@@ -79,7 +79,7 @@ angular.module('docs').controller('DocumentViewWorkflow', function ($scope, $sta
 
       for(var i = 0; i < blindWith.length; i++ ) {
         var blindItem = blindWith[i];
-        if(('USER' == blindItem.type && username == blindItem.name) || ('GROUP' == blindItem.type && groups.indexOf(blindItem[name]) > -1)) {
+        if(('USER' == blindItem.type && username == blindItem.name) || ('GROUP' == blindItem.type && groups.indexOf(blindItem.name) > -1)) {
           return false;
         }
       }
@@ -97,14 +97,16 @@ angular.module('docs').controller('DocumentViewWorkflow', function ($scope, $sta
       return canedit;
     }
 
-    if(step.comment_config.allowEdit == 'not_alow'){
-      return false;
-    } else if(step.comment_config.allowEdit == 'incomplete') {
-      var allfill = true;
-      route.steps.forEach(function(istep) {
+    if(step.comment_config.allowEdit != 'allow') {
+      if(step.comment_config.allowEdit == 'incomplete') {
+        var allfill = true;
+        route.steps.forEach(function(istep) {
           allfill = !!istep.transition;
-      });
-      if(allfill) {
+        });
+        if(allfill) {
+          return false;
+        }
+      } else {
         return false;
       }
     }
