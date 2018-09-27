@@ -85,6 +85,8 @@ public class AppResource extends BaseResource {
         String minVersion = configBundle.getString("api.min_version");
         Boolean guestLogin = ConfigUtil.getConfigBooleanValue(ConfigType.GUEST_LOGIN);
         String defaultLanguage = ConfigUtil.getConfigStringValue(ConfigType.DEFAULT_LANGUAGE);
+        String autoSeparateZipRegex = ConfigUtil.getConfigStringValue(ConfigType.AUTO_SEPARATE_ZIP_REGEX);
+        String dicomNameRegex = ConfigUtil.getConfigStringValue(ConfigType.DICOM_NAME_REGEX);
         UserDao userDao = new UserDao();
         DocumentDao documentDao = new DocumentDao();
         String globalQuotaStr = System.getenv(Constants.GLOBAL_QUOTA_ENV);
@@ -98,6 +100,8 @@ public class AppResource extends BaseResource {
                 .add("min_version", minVersion)
                 .add("guest_login", guestLogin)
                 .add("default_language", defaultLanguage)
+                .add("auto_separate_zip_regex", autoSeparateZipRegex)
+                .add("dicom_name_regex", dicomNameRegex)
                 .add("total_memory", Runtime.getRuntime().totalMemory())
                 .add("free_memory", Runtime.getRuntime().freeMemory())
                 .add("document_count", documentDao.getDocumentCount())
@@ -154,10 +158,11 @@ public class AppResource extends BaseResource {
      */
     @POST
     @Path("config")
-    public Response config(@FormParam("default_language") String defaultLanguage) {
+    public Response config(@FormParam("default_language") String defaultLanguage, @FormParam("auto_separate_zip_regex") String autoSeparateZipRegex, @FormParam("dicom_name_regex") String dicomNameRegex) {
         if (!authenticate()) {
             throw new ForbiddenClientException();
         }
+
         checkBaseFunction(BaseFunction.ADMIN);
         ValidationUtil.validateRequired(defaultLanguage, "default_language");
         if (!Constants.SUPPORTED_LANGUAGES.contains(defaultLanguage)) {
@@ -166,6 +171,8 @@ public class AppResource extends BaseResource {
 
         ConfigDao configDao = new ConfigDao();
         configDao.update(ConfigType.DEFAULT_LANGUAGE, defaultLanguage);
+        configDao.update(ConfigType.AUTO_SEPARATE_ZIP_REGEX, autoSeparateZipRegex);
+        configDao.update(ConfigType.DICOM_NAME_REGEX, dicomNameRegex);
 
         return Response.ok().build();
     }

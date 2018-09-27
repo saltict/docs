@@ -381,6 +381,8 @@
       "title_theme": "Theme customization",
       "title_general": "General configuration",
       "default_language": "Default language for new documents",
+      "auto_separate_zip_regex": "Auto separate zip file name regex",
+      "dicom_name_regex": "Dicom file name regex",
       "application_name": "Application name",
       "main_color": "Main color",
       "custom_css": "Custom CSS",

@@ -74,6 +74,9 @@ dwv.gui.Toolbox = dwv.gui.base.Toolbox;
 // ZoomAndPan
 dwv.gui.ZoomAndPan = dwv.gui.base.ZoomAndPan;
 
+// ZoomAndPan
+dwv.gui.WindowLevel = dwv.gui.base.WindowLevel;
+
 // Scroll
 dwv.gui.Scroll = dwv.gui.base.Scroll;
 
@@ -112,8 +115,9 @@ angular.module('docs').directive('dicomViewer', function() {
     scope: {
       file: '='
     },
-    controller: function($scope, $timeout, $translate) {
+    controller: function($scope, $rootScope, $timeout, $translate) {
       $scope.dicomId = dwv.dicomIdCounter++;
+      $scope.file.message = null;
       dwv.gui.getWindowSize = function() {
         return {'width': ($(window).width()), 'height': ($(window).height() - 135)};
       };
@@ -127,9 +131,65 @@ angular.module('docs').directive('dicomViewer', function() {
           "fitToWindow"   : true,
           "gui"           : ["tool", "undo"],
           "loader"        : ["Url"],
-          "tools"         : ["Scroll","ZoomAndPan", "Draw"],
+          "tools"         : ["Scroll", "WindowLevel", "ZoomAndPan", "Draw"],
           "shapes"        : ["Ruler", "Protractor", "Rectangle"]
         };
+
+        var fileSize = Number.parseFloat($scope.file.size / 1048576).toFixed(2);
+        dwv.gui.displayProgress = function(percent){
+          $scope.file.message = ("Loading " + percent + "% of " + fileSize + "MB");
+        };
+
+        var dicomNameRegex = $rootScope.app.dicom_name_regex;
+        dwv.io.ZipLoader.prototype.getDicomRegex = function() {
+          return new RegExp(dicomNameRegex);
+        };
+
+        dwv.io.ZipLoader.prototype.onLoadingZip = function(current) {
+          $scope.file.message = ("Found " + current + " DICOM files");
+        };
+        dwv.io.ZipLoader.prototype.onLoadingZipDone = function(current) {
+          $scope.file.message = ("Found " + current + " DICOM files");
+        };
+
+        dwv.io.ZipLoader.prototype.processDataBeforeRender = function(files) {
+          files.sort(function(a, b) {
+            if(a.filename.length < b.filename.length) return -1;
+            if(a.filename.length > b.filename.length) return 1;
+            if(a.filename < b.filename) return -1;
+            if(a.filename > b.filename) return 1;
+            return 0;
+          });
+
+          var num = files.length;
+
+          var baseArray = new Array(num).fill().map(function(item, index) {
+            return (index + 1).toString();
+          });
+          baseArray.sort();
+          var sortedIndexList = new Array(num).fill().map(function(item, index) {
+            return baseArray.indexOf((index + 1).toString());
+          });
+
+          return new Array(num).fill().map(function(item, index) {
+            return files[sortedIndexList[index]];
+          });
+        };
+
+        dwv.io.ZipLoader.prototype.onRendering = function(current, max) {
+          if(current < max) {
+            $scope.file.message = ("Rendered " + current + " / " + max + " files");
+          }
+        };
+        dwv.io.ZipLoader.prototype.onRendered = function(max) {
+          console.log("Done!");
+          $scope.file.message = "Done!";
+          $timeout(function() {
+            $scope.file.message = null
+          }, 1000);
+        };
+
+        dwv.io.loaderList = ["DicomDataLoader", "ZipLoader"];
 
         var dicomViewer = new dwv.App();
         dicomViewer.init(options);
@@ -167,7 +227,7 @@ angular.module('docs').directive('dicomThumbnail', function() {
     scope: {
       file: '='
     },
-    controller: function($scope, $timeout) {
+    controller: function($scope,$rootScope, $timeout) {
       $scope.dicomId = dwv.dicomIdCounter++;
 
       $timeout(function() {

@@ -11,11 +11,10 @@ angular.module('docs').directive('zipViewer', function() {
     scope      : {
       file: '='
     },
-    controller : function($scope, $timeout) {
+    controller : function($scope, $rootScope) {
        $scope.fileList = {};
        $scope.canOpenWithDicomViewer = false;
        $scope.openInDicomViewer = function() {
-         console.log('viewer');
          $scope.$parent.changeViewer('DicomViewer');
        };
 
@@ -28,16 +27,16 @@ angular.module('docs').directive('zipViewer', function() {
        };
 
       if($scope.file.id) {
-        JSZipUtils.getBinaryContent('../api/file/' + $scope.file.id + "/data", function(err, data) {
+        JSZipUtils.getBinaryContent("../api/file/" + $scope.file.id + "/data", function(err, data) {
           if(err) {
             throw err;
           }
-
+          var dicomNameRegex = $rootScope.app.dicom_name_regex;
           JSZip.loadAsync(data).then(function(zip) {
             $scope.fileList = zip.files;
             var keyList = Object.keys(zip.files);
             for(var i = 0; i< keyList.length; i++) {
-              if(keyList[i].match("\.dcm$")) {
+              if(keyList[i].match(new RegExp(dicomNameRegex))) {
                 $scope.canOpenWithDicomViewer = true;
               }
             }

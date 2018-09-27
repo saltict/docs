@@ -43,7 +43,8 @@ angular.module('docs').controller('DocumentViewContent', function ($scope, $root
   $scope.loadFiles();
 
   function selectFileViewer(file){
-    if(file.name.match(/\.dcm$/)) {
+    var dicomNameRegex = $rootScope.app.dicom_name_regex;
+    if(true) {
       return 'DicomViewer';
     }  else {
       return 'ImageViewer';
@@ -133,12 +134,31 @@ angular.module('docs').controller('DocumentViewContent', function ($scope, $root
       newfile.progress = parseInt(100.0 * e.loaded / e.total);
     })
     .success(function(data) {
-      // Update local model with real data
-      newfile.id = data.id;
-      newfile.size = data.size;
+      if(!!data.zipList && data.zipList.length > 0) {
+        var fileList = $scope.files;
+        data.zipList.forEach(function(file) {
+          var newZFile = angular.copy(newfile);
+          newZFile.name = file.name;
+          newZFile.size = file.size;
+          $rootScope.userInfo.storage_current += file.size;
+          newZFile.id = file.id;
+          fileList.push(newZFile);
+        });
 
-      // New file uploaded, increase used quota
-      $rootScope.userInfo.storage_current += data.size;
+        //Replace new file with zip list
+        for(var i = 0; i < fileList.length; i++) {
+          if(fileList[i].name == data.name) {
+            delete fileList.splice(i, 1);
+          }
+        }
+      } else {
+        // Update local model with real data
+        newfile.id = data.id;
+        newfile.size = data.size;
+
+        // New file uploaded, increase used quota
+        $rootScope.userInfo.storage_current += data.size;
+      }
     })
     .error(function (data) {
       newfile.status = $translate.instant('document.view.content.upload_error');

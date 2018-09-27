@@ -21,7 +21,18 @@
       </select>
     </div>
   </div>
-
+  <div class="form-group" ng-class="{ 'has-error': !generalForm.autoSeparateZipRegex.$valid && generalForm.$dirty }">
+    <label class="col-sm-2 control-label" for="autoSeparateZipRegex">{{ 'settings.config.auto_separate_zip_regex' | translate }}</label>
+    <div class="col-sm-7">
+      <input type="text" class="form-control" name="autoSeparateZipRegex" id="autoSeparateZipRegex" ng-model="general.auto_separate_zip_regex">
+    </div>
+  </div>
+  <div class="form-group" ng-class="{ 'has-error': !generalForm.dicomNameRegex.$valid && generalForm.$dirty }">
+    <label class="col-sm-2 control-label" for="dicomNameRegex">{{ 'settings.config.dicom_name_regex' | translate }}</label>
+    <div class="col-sm-7">
+      <input type="text" class="form-control" name="dicomNameRegex" id="dicomNameRegex" ng-model="general.dicom_name_regex">
+    </div>
+  </div>
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
       <button type="submit" class="btn btn-primary" ng-click="editGeneralConfig()" ng-disabled="!generalForm.$valid">

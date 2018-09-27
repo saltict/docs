@@ -1354,7 +1354,7 @@ dwv.App = function ()
     function handleAbort(error)
     {
         // log
-        if ( error.message ) {
+        if ( error && error.message ) {
             console.warn(error.message);
         }
         else {
@@ -18199,6 +18199,7 @@ dwv.io.UrlsLoader.prototype.load = function (ioArray, options)
 
     var mproghandler = new dwv.utils.MultiProgressHandler(self.onprogress);
     mproghandler.setNToLoad( ioArray.length );
+    mproghandler.setNumberOfDimensions(1);
 
     // get loaders
     var loaders = [];
@@ -18354,22 +18355,38 @@ dwv.io.ZipLoader = function ()
     		var num = files.length;
     		filename = zobjs[num].name;
     		zobjs[num].async("arrayBuffer").then(zipAsyncCallback);
+    		if(num % 100 == 0) {
+            self.onLoadingZip(num);
+        }
     	}
     	else {
-            var memoryIO = new dwv.io.MemoryLoader();
-            memoryIO.onload = self.onload;
-            memoryIO.onloadend = function () {
-                // reset loading flag
-                isLoading = false;
-                // call listeners
-                self.onloadend();
-            };
-            memoryIO.onprogress = self.onprogress;
-            memoryIO.onerror = self.onerror;
-            memoryIO.onabort = self.onabort;
+        var max = files.length;
+        self.onLoadingZip(max);
+        self.onLoadingZipDone(max);
 
-            memoryIO.load(files);
-        }
+        var lazyLoadingTime = 80; //Add delay each loading frame
+        var processedFiles = self.processDataBeforeRender(files);
+        var loader = new dwv.io.DicomDataLoader();
+        loader.onload = self.onload;
+        loader.onerror = self.onerror;
+        loader.onabort = self.onabort;
+
+        (function rLoad(i){
+            setTimeout(function(){
+              file = processedFiles[i];
+              if(loader.canLoadUrl(file.filename)){
+                loader.load(file.data, file.filename, i);
+              }
+                i++;
+                self.onRendering(i, max);
+                if(i < max && isLoading) {
+                    rLoad(i);
+                } else {
+                    self.onRendered(max);
+                }
+            }, lazyLoadingTime)
+        })(0);
+      }
     }
 
     /**
@@ -18384,11 +18401,11 @@ dwv.io.ZipLoader = function ()
 
         JSZip.loadAsync(buffer).then( function(zip) {
             files = [];
-        	zobjs = zip.file(/.*\.dcm/);
+            zobjs = zip.file(self.getDicomRegex());
             // recursively load zip files into the files array
-        	var num = files.length;
-        	filename = zobjs[num].name;
-        	zobjs[num].async("arrayBuffer").then(zipAsyncCallback);
+            var num = files.length;
+            filename = zobjs[num].name;
+            zobjs[num].async("arrayBuffer").then(zipAsyncCallback);
         });
     };
 
@@ -18459,6 +18476,54 @@ dwv.io.ZipLoader.prototype.canLoadUrl = function (url) {
 };
 
 /**
+* Load regex to detech dicom file in zip
+* @returns {RegExp}
+*/
+dwv.io.ZipLoader.prototype.getDicomRegex = function() {
+    return new RegExp(".+\.dcm");
+};
+
+/**
+* Loading zip actions
+* @returns {RegExp}
+*/
+dwv.io.ZipLoader.prototype.onLoadingZip = function(current) {
+
+};
+
+/**
+* Loading zip actions
+* @returns {RegExp}
+*/
+dwv.io.ZipLoader.prototype.onLoadingZipDone = function() {
+
+};
+
+/**
+* Process data before render actions
+* @returns {RegExp}
+*/
+dwv.io.ZipLoader.prototype.processDataBeforeRender = function(files) {
+    return files;
+};
+
+/**
+* Rendering actions
+* @returns {RegExp}
+*/
+dwv.io.ZipLoader.prototype.onRendering = function(current, max) {
+
+};
+
+/**
+* Rendering actions done
+* @returns {RegExp}
+*/
+dwv.io.ZipLoader.prototype.onRendered = function(max) {
+
+};
+
+/**
  * Get the file content type needed by the loader.
  * @return One of the 'dwv.io.fileContentTypes'.
  */
@@ -18505,7 +18570,7 @@ dwv.io.ZipLoader.prototype.onerror = function (/*event*/) {};
  *  optional 'event.message'.
  * Default does nothing.
  */
-dwv.io.ZipLoader.prototype.onabort = function (/*event*/) {};
+dwv.io.ZipLoader.prototype.onabort = function (event) {};
 
 /**
  * Add to Loader list.

@@ -3,6 +3,7 @@ package com.sismics.docs.rest.resource;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.io.ByteStreams;
+import com.sismics.docs.core.constant.ConfigType;
 import com.sismics.docs.core.constant.PermType;
 import com.sismics.docs.core.dao.jpa.AclDao;
 import com.sismics.docs.core.dao.jpa.DocumentDao;
@@ -14,6 +15,7 @@ import com.sismics.docs.core.event.FileCreatedAsyncEvent;
 import com.sismics.docs.core.event.FileDeletedAsyncEvent;
 import com.sismics.docs.core.model.jpa.File;
 import com.sismics.docs.core.model.jpa.User;
+import com.sismics.docs.core.util.ConfigUtil;
 import com.sismics.docs.core.util.DirectoryUtil;
 import com.sismics.docs.core.util.EncryptionUtil;
 import com.sismics.docs.core.util.FileUtil;
@@ -39,16 +41,21 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.StreamingOutput;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -113,34 +120,65 @@ public class FileResource extends BaseResource {
                 throw new NotFoundException();
             }
         }
-        
-        // Keep unencrypted data temporary on disk
-        java.nio.file.Path unencryptedFile;
-        long fileSize;
+
+        String name = null;
         try {
-            unencryptedFile = ThreadLocalContext.get().createTemporaryFile();
-            Files.copy(fileBodyPart.getValueAs(InputStream.class), unencryptedFile, StandardCopyOption.REPLACE_EXISTING);
-            fileSize = Files.size(unencryptedFile);
-        } catch (IOException e) {
-            throw new ServerException("StreamError", "Error reading the input file", e);
+            name = fileBodyPart.getContentDisposition() != null ?
+                    URLDecoder.decode(fileBodyPart.getContentDisposition().getFileName(), "UTF-8") : null;
+        } catch (UnsupportedEncodingException e) {
+            throw new ClientException("FileError", "Can not read file name", e);
         }
 
-        try {
-            String name = fileBodyPart.getContentDisposition() != null ?
-                    URLDecoder.decode(fileBodyPart.getContentDisposition().getFileName(), "UTF-8") : null;
-            String fileId = FileUtil.createFile(name, unencryptedFile, fileSize, documentDto == null ?
-                    null : documentDto.getLanguage(), principal.getId(), documentId);
+        String autoZipSeparateRegex = ConfigUtil.getConfigStringValue(ConfigType.AUTO_SEPARATE_ZIP_REGEX);
+        Pattern p = Pattern.compile(autoZipSeparateRegex);
+        if(name != null && p.matcher(name).find()) {
+            try {
+                List<Map<String, String>> fileList = FileUtil.createMultipleFilesWithZip(fileBodyPart.getValueAs(InputStream.class), documentDto == null ? null : documentDto.getLanguage(), principal.getId(), documentId);
 
-            // Always return OK
-            JsonObjectBuilder response = Json.createObjectBuilder()
-                    .add("status", "ok")
-                    .add("id", fileId)
-                    .add("size", fileSize);
-            return Response.ok().entity(response.build()).build();
-        } catch (IOException e) {
-            throw new ClientException(e.getMessage(), e.getMessage(), e);
-        } catch (Exception e) {
-            throw new ServerException("FileError", "Error adding a file", e);
+                JsonArrayBuilder zipList = Json.createArrayBuilder();
+                for (Map<String, String> fileInfo: fileList) {
+                    JsonObjectBuilder fileInfoJson = Json.createObjectBuilder()
+                            .add("id", fileInfo.get("id"))
+                            .add("name", fileInfo.get("name"))
+                            .add("size", fileInfo.get("size"));
+                    zipList.add(fileInfoJson);
+                }
+                // Always return OK
+                JsonObjectBuilder response = Json.createObjectBuilder()
+                        .add("status", "ok")
+                        .add("name", name)
+                        .add("zipList", zipList);
+                return Response.ok().entity(response.build()).build();
+            } catch (Exception e) {
+                throw new ServerException("FileError", "Error adding multiples a file", e);
+            }
+        } else {
+            // Keep unencrypted data temporary on disk
+            java.nio.file.Path unencryptedFile;
+            long fileSize;
+            try {
+                unencryptedFile = ThreadLocalContext.get().createTemporaryFile();
+                Files.copy(fileBodyPart.getValueAs(InputStream.class), unencryptedFile, StandardCopyOption.REPLACE_EXISTING);
+                fileSize = Files.size(unencryptedFile);
+            } catch (IOException e) {
+                throw new ServerException("StreamError", "Error reading the input file", e);
+            }
+
+            try {
+                String fileId = FileUtil.createFile(name, unencryptedFile, fileSize, documentDto == null ?
+                        null : documentDto.getLanguage(), principal.getId(), documentId);
+
+                // Always return OK
+                JsonObjectBuilder response = Json.createObjectBuilder()
+                        .add("status", "ok")
+                        .add("id", fileId)
+                        .add("size", fileSize);
+                return Response.ok().entity(response.build()).build();
+            } catch (IOException e) {
+                throw new ClientException(e.getMessage(), e.getMessage(), e);
+            } catch (Exception e) {
+                throw new ServerException("FileError", "Error adding a file", e);
+            }
         }
     }
     
@@ -560,7 +598,14 @@ public class FileResource extends BaseResource {
         if (decrypt) {
             // Cache real files
             builder.header(HttpHeaders.CACHE_CONTROL, "private")
+
                     .header(HttpHeaders.EXPIRES, HttpUtil.buildExpiresHeader(3_600_000L * 24L * 365L));
+            try {
+                long fileSize = Files.size(storedFile);
+                builder.header(HttpHeaders.CONTENT_LENGTH , fileSize);
+            } catch (Exception e) {
+                //Ignore when not calculate file size
+            }
         } else {
             // Do not cache the temporary thumbnail
             builder.header(HttpHeaders.CACHE_CONTROL, "no-store, must-revalidate")

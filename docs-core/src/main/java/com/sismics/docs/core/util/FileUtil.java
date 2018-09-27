@@ -21,13 +21,18 @@ import org.apache.commons.lang.StringUtils;
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.imageio.ImageIO;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 /**
  * File entity utilities.
@@ -177,6 +182,67 @@ public class FileUtil {
         }
 
         return fileId;
+    }
+
+    /**
+     * Create multiple child file from input stream of a zip file.
+     * @param fileInputStream
+     * @param language
+     * @param userId
+     * @param documentId
+     * @return
+     * @throws Exception
+     */
+    public static List<Map<String, String>> createMultipleFilesWithZip(InputStream fileInputStream, String language, String userId, String documentId) throws Exception {
+        List<Map<String, String>> createdFiles = new ArrayList<>();
+        ZipInputStream zipInputStream = new ZipInputStream(fileInputStream);
+        String parentPath = null;
+        ZipOutputStream zipOutputStream = null;
+        java.io.File outputFile = null;
+        Path outputPath = null;
+        int length;
+        byte[] bytes = new byte[1024];
+
+        //Build new zip file list from old
+        ZipEntry zipEntry = zipInputStream.getNextEntry();
+        while (zipEntry != null) {
+            Path entryPath = Paths.get(zipEntry.getName());
+            if (!zipEntry.isDirectory()) {
+                if(parentPath == null) {
+                    parentPath = entryPath.getParent().toString();
+                    outputPath = ThreadLocalContext.get().createTemporaryFile();
+                    outputFile = new java.io.File(outputPath.toString());
+                    zipOutputStream = new ZipOutputStream(new FileOutputStream(outputFile));
+                }
+                ZipEntry newZEntry = new ZipEntry(entryPath.getFileName().toString());
+                zipOutputStream.putNextEntry(newZEntry);
+                while((length = zipInputStream.read(bytes)) >= 0) {
+                    zipOutputStream.write(bytes, 0, length);
+                }
+                zipOutputStream.closeEntry();
+            }
+
+            zipEntry = zipInputStream.getNextEntry();
+            if(zipEntry == null || zipEntry.isDirectory()){
+                if(zipOutputStream != null && outputPath != null) {
+                    zipOutputStream.finish();
+                    zipOutputStream.close();
+                    String outputName = parentPath.replaceAll("/", "_") + ".zip";
+                    long fileSize = Files.size(outputPath);
+                    String newId = FileUtil.createFile(outputName, outputPath, fileSize, language, userId, documentId);
+                    Map<String, String> fileInfo = new HashMap<>();
+                            fileInfo.put("id", newId);
+                            fileInfo.put("name", outputName);
+                            fileInfo.put("size", String.valueOf(fileSize));
+                    createdFiles.add(fileInfo);
+                    outputPath = null;
+                    zipOutputStream = null;
+                }
+                parentPath = null;
+            }
+        }
+
+        return createdFiles;
     }
 
     /**

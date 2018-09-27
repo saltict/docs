@@ -8,7 +8,9 @@ angular.module('docs').controller('SettingsConfig', function($scope, $rootScope,
   Restangular.one('app').get().then(function (data) {
     $rootScope.app = data;
     $scope.general = {
-      default_language: data.default_language
+      default_language: data.default_language,
+      auto_separate_zip_regex: data.auto_separate_zip_regex,
+      dicom_name_regex: data.dicom_name_regex
     }
   });
 

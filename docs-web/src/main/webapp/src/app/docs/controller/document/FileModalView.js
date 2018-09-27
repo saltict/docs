@@ -3,13 +3,12 @@
 /**
  * File modal view controller.
  */
-angular.module('docs').controller('FileModalView', function ($uibModalInstance, $scope, $state, $stateParams, $sce, Restangular, $transitions) {
+angular.module('docs').controller('FileModalView', function ($uibModalInstance, $scope, $rootScope, $state, $stateParams, $sce, Restangular, $transitions) {
   $scope.fileViewer =  'ImageViewer';
 
   // Load files
   Restangular.one('file/list').get({ id: $stateParams.id }).then(function (data) {
     $scope.files = data.files;
-
     // Search current file
     _.each($scope.files, function (value) {
       if (value.id === $stateParams.fileId) {
@@ -21,7 +20,8 @@ angular.module('docs').controller('FileModalView', function ($uibModalInstance, 
   });
 
   function selectFileViewer(file){
-    if(file.name.match(/\.dcm$/)) {
+    var dicomNameRegex = $rootScope.app.dicom_name_regex;
+    if(file.name.match(new RegExp(dicomNameRegex))) {
       $scope.fileViewer =  'DicomViewer';
     } else if(file.mimetype === 'application/zip') {
       $scope.fileViewer =  'ZipViewer';

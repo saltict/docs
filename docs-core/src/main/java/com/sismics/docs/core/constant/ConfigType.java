@@ -24,6 +24,8 @@ public enum ConfigType {
      * Default language.
      */
     DEFAULT_LANGUAGE,
+    AUTO_SEPARATE_ZIP_REGEX,
+    DICOM_NAME_REGEX,
 
     /**
      * SMTP server configuration.

@@ -185,8 +185,14 @@ angular.module('docs').controller('DocumentEdit', function($rootScope, $scope, $
           // Update progress bar and title on progress
           var startProgress = $scope.fileProgress;
           deferred.promise.then(function(data) {
-            // New file uploaded, increase used quota
-            $rootScope.userInfo.storage_current += data.size;
+            if(!!data.zipList && data.zipList.length > 0) {
+              data.zipList.forEach(function(file) {
+                $rootScope.userInfo.storage_current += file.size;
+              });
+            } else {
+              // New file uploaded, increase used quota
+              $rootScope.userInfo.storage_current += data.size;
+            }
           }, function(data) {
             // Error uploading a file, we stop here
             $scope.alerts.unshift({
